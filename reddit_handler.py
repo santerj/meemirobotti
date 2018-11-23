@@ -24,21 +24,21 @@ def get_url(multireddit, client_id, client_secret, user_agent):
     sub = reddit.subreddit(random_sub)
 
     try:
-        posts = [post for post in sub.hot(limit=100)]
+        posts = [post for post in sub.top(time_filter='week', limit=50)]
 
     except prawcore.exceptions.Redirect:
         multireddit.remove(random_sub)
         random_sub = multireddit[random.randrange(len(multireddit))]
         sub = reddit.subreddit(random_sub)
-        posts = [post for post in sub.hot(limit=100)]
+        posts = [post for post in sub.top(time_filter='week', limit=50)]
 
     i = 0
     while True:
 
-        if i > 50:
+        if i > 20:
             get_url(multireddit, client_id, client_secret, user_agent)
 
-        random_post_number = random.randrange(1, 99)
+        random_post_number = random.randrange(len(posts))
         random_post = posts[random_post_number]
         url = random_post.url
 
@@ -49,8 +49,10 @@ def get_url(multireddit, client_id, client_secret, user_agent):
         loc = url.find('i.')
         site_name = url[loc + 2:loc + 10].split('.')[0]
         whitelist = ["imgur", "redd"]
+        blacklist = [".gif", "gifv"]
 
-        if site_name in whitelist:
+        if site_name in whitelist and url[-4:] not in blacklist and \
+                'nsf' not in random_post.title.lower():
             # Satisfying link was found.
             link = url
             title = random_post.title
