@@ -37,15 +37,12 @@ def get_url(multireddit, client_id, client_secret, user_agent):
 
         if i > 20:
             get_url(multireddit, client_id, client_secret, user_agent)
+            break
 
         random_post_number = random.randrange(len(posts))
         random_post = posts[random_post_number]
         url = random_post.url
 
-        # This part looks awful, but it returns the next 8(?)
-        # characters from url which are after 'i.'.
-        # So for example we can check if the link is from
-        # i.imgur.com or i.redd.it (which is what is done below).
         loc = url.find('i.')
         site_name = url[loc + 2:loc + 10].split('.')[0]
         whitelist = ["imgur", "redd"]

@@ -105,8 +105,11 @@ class Bot:
 
     def new_meme(self):
         # Refresh the meme
-        self.__link, self.__title, self.__sub = get_url(multireddit=self.__multireddit, client_id=CLIENT_ID,
-                                                        client_secret=SECRET, user_agent=USER_AGENT)
+        try:
+            self.__link, self.__title, self.__sub = get_url(multireddit=self.__multireddit, client_id=CLIENT_ID,
+                                                            client_secret=SECRET, user_agent=USER_AGENT)
+        except TypeError:
+            self.new_meme()
 
     def admin(self, update):
         keyword = '/admin '
@@ -142,7 +145,7 @@ class Bot:
                     message = "error: subreddit doesn't exist or reddit not responsive"
                 else:
                     self.__multireddit.append(target)
-                    self.__multireddit = sorted(self.__multireddit(), key=lambda s: s.casefold())
+                    # self.__multireddit = sorted(self.__multireddit(), key=lambda s: s.casefold())
                     message = "added " + target
 
             else:

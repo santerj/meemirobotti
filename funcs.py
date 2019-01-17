@@ -88,6 +88,13 @@ def decide(msg):
     separator = "vai "
     command = "/help"
 
+    if msg[-3:-1] == '???':
+        rnd = randrange(0, 1)
+        if rnd == 0:
+            return "Joo"
+        else:
+            return "Ei"
+
     if separator not in msg:
         return "pro tip: \"vai\""
 
