@@ -1,22 +1,23 @@
-import config
 import json
-import requests
-
 from socket import gaierror
 from time import time, sleep
 
-from reddit_handler import get_url
+import requests
+
+import config
 from funcs import decide
 from funcs import get_subreddits
-from funcs import uptime
+from funcs import scramble
 from funcs import test_subreddit_validity
+from funcs import uptime
+from reddit_handler import get_url
 
 TOKEN = config.token
 CLIENT_ID = config.client_id
 SECRET = config.secret
 USER_AGENT = config.user_agent
 ADMIN_ID = config.admin_id
-SLEEP = 3
+SLEEP = 1.5
 
 
 class Bot:
@@ -73,7 +74,10 @@ class Bot:
         # A command interpreter of sorts - all used Telegram bot
         # commands should be specified here
 
-        if '/meme' in update['message']['text']:
+        if update['message']['entities'][0]['type'] != 'bot_command':
+            pass
+
+        elif '/meme' in update['message']['text']:
             self.send_meme(update)
             self.__memes_sent += 1
 
@@ -84,6 +88,10 @@ class Bot:
         elif update['message']['from']['id'] == self.__admin_id and\
                 '/admin' in update['message']['text']:
             self.admin(update)
+
+        elif update['message']['reply_to_message']:
+            if '/kaannos' in update['message']['text']:
+                self.translate(update)
 
     def send_meme(self, update):
 
@@ -159,5 +167,10 @@ class Bot:
             message = uptime(time() - self.__start_time)
             message = message + str(self.__memes_sent) + " memes sent \n"
 
+        chat_id = update['message']['chat']['id']
+        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+
+    def translate(self, update):
+        message = scramble(update['message']['reply_to_message']['text'])
         chat_id = update['message']['chat']['id']
         requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))

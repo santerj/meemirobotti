@@ -4,10 +4,15 @@ import prawcore
 import json
 import requests
 from time import sleep
-from random import randrange
+from random import randrange, getrandbits
 
 # file containing the default subreddits
 DEFAULT = "default_subreddits.txt"
+ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+            'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+            'y', 'z', 'å', 'ä', 'ö', '0', '3', '7',
+            '8', '9', ' ', ',', '']
 
 
 def error_message():
@@ -88,15 +93,15 @@ def decide(msg):
     separator = "vai "
     command = "/help"
 
-    if msg[-3:-1] == '???':
-        rnd = randrange(0, 1)
-        if rnd == 0:
+    if msg[-1] == '?':
+        rnd = getrandbits(1)
+        if rnd:
             return "Joo"
         else:
             return "Ei"
 
     if separator not in msg:
-        return "pro tip: \"vai\""
+        return "/help: Käytä avainsanaa \"vai\" tai päätä viesti kysymysmerkkiin"
 
     # TODO: better handling of empty fields
 
@@ -129,3 +134,19 @@ def uptime(time):
               f"{seconds} seconds\n\n"
 
     return message
+
+
+def scramble(text):
+
+    scrambled_text = ''
+
+    for i in range(len(text)):
+        chance = randrange(11)
+        if chance == 0:
+            char = ALPHABET[randrange(len(ALPHABET))]
+        else:
+            char = text[i]
+
+        scrambled_text = scrambled_text + char
+
+    return scrambled_text
