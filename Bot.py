@@ -93,7 +93,7 @@ class Bot:
                     '/kaannos: vastaa johonkin viestiin komennolla /kaannos. Ei toimi muiden bottien viesteihin.'
                 )
 
-    # ----------method bodies defined below.
+    #                                  method bodies defined below.
 
     def send_meme(self, update):
 

@@ -2,6 +2,7 @@ import praw
 import prawcore
 import random
 
+FILTER = 'day'
 
 def get_url(multireddit, client_id, client_secret, user_agent):
     """RETURNS:
@@ -30,7 +31,7 @@ def get_url(multireddit, client_id, client_secret, user_agent):
         multireddit.remove(random_sub)
         random_sub = multireddit[random.randrange(len(multireddit))]
         sub = reddit.subreddit(random_sub)
-        posts = [post for post in sub.top(time_filter='week', limit=50)]
+        posts = [post for post in sub.top(time_filter=FILTER, limit=50)]
 
     i = 0
     while True:
