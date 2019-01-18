@@ -83,6 +83,9 @@ class Bot:
         elif '/stats' in update['message']['text']:
             self.stats(update)
 
+        elif '/wappuun' in update['message']['text']:
+            self.wappu(update)
+
         elif update['message']['reply_to_message']:
             if '/kaannos' in update['message']['text']:
                 self.translate(update)
@@ -122,6 +125,14 @@ class Bot:
         requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
 
     def translate(self, update):
+
         message = funcs.scramble(update['message']['reply_to_message']['text'])
+        chat_id = update['message']['chat']['id']
+        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+
+    def wappu(self, update):
+
+        tampin_paljastuspaiva_2019 = 1555452000
+        message = funcs.time_until(tampin_paljastuspaiva_2019)
         chat_id = update['message']['chat']['id']
         requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))

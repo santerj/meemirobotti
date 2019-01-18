@@ -3,7 +3,7 @@ import praw
 import prawcore
 import json
 import requests
-from time import sleep
+from time import time, sleep
 from random import randrange, getrandbits
 
 # file containing the default subreddits
@@ -21,6 +21,7 @@ def error_message():
 
 
 def get_subreddits():
+
     subs = []
     file = open(DEFAULT)
     for line in file:
@@ -58,6 +59,7 @@ def test_subreddit_validity(sub):
 
 
 def startup():
+
     print("Starting up...")
 
     token = config.token
@@ -72,10 +74,6 @@ def startup():
             subs_to_be_removed.append(sub)
 
         sleep(1)
-
-    # this should change the private member of Bot instance.
-    # Not currently functional.
-    # subs = [item for item in subs if item not in subs_to_be_removed]
 
     print("Accessing telegram...")
     url = 'https://api.telegram.org/bot%s/' % token
@@ -94,7 +92,7 @@ def decide(msg):
     command = "/help"
 
     if msg[-1] == '?':
-        rnd = getrandbits(1)
+        rnd = getrandbits(1) # 0 or 1
         if rnd:
             return "Joo"
         else:
@@ -117,15 +115,15 @@ def decide(msg):
     return beginning + choices[rnd]
 
 
-def uptime(time):
+def uptime(timestamp):
 
-    days = int(time // 86400)
-    time = time - (days * 86400)
-    hours = int(time // 3600)
-    time = time - (hours * 3600)
-    minutes = int(time // 60)
-    time = time - (minutes * 60)
-    seconds = int(time)
+    days = int(timestamp // 86400)
+    timestamp = timestamp - (days * 86400)
+    hours = int(timestamp // 3600)
+    timestamp = timestamp - (hours * 3600)
+    minutes = int(timestamp // 60)
+    timestamp = timestamp - (minutes * 60)
+    seconds = int(timestamp)
 
     message = f"Current uptime:\n" \
               f"{days} days\n" \
@@ -150,3 +148,23 @@ def scramble(text):
         scrambled_text = scrambled_text + char
 
     return scrambled_text
+
+
+def time_until(timestamp):
+
+    remaining = timestamp - time()
+
+    if remaining < 0:
+        message = 'Wappuun on vielä pitkä, pitkä aika.'
+        return message
+
+    days = int(remaining // 86400)
+    remaining = remaining - (days * 86400)
+    hours = int(remaining // 3600)
+    remaining = remaining - (hours * 3600)
+    minutes = int(remaining // 60)
+    remaining = remaining - (minutes * 60)
+    seconds = int(remaining)
+
+    message = f"{days} päivää, {hours} tuntia, {minutes} minuuttia ja {seconds} sekuntia."
+    return message
