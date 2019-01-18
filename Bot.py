@@ -66,8 +66,7 @@ class Bot:
 
     def process_update(self, update):
 
-        # A command interpreter of sorts - all used Telegram bot
-        # commands should be specified here
+        # A command interpreter of sorts - all used Telegram bot commands should be specified here
 
         if update['message']['entities'][0]['type'] != 'bot_command':
             # only process messages that begin with /
@@ -86,9 +85,15 @@ class Bot:
         elif '/wappuun' in update['message']['text']:
             self.wappu(update)
 
-        elif update['message']['reply_to_message']:
-            if '/kaannos' in update['message']['text']:
+        elif '/kaannos' in update['message']['text']:
+            if 'reply_to_message' in update['message'].keys():
                 self.translate(update)
+            else:
+                self.send_message(update=update, message=
+                    '/kaannos: vastaa johonkin viestiin komennolla /kaannos. Ei toimi muiden bottien viesteihin.'
+                )
+
+    # ----------method bodies defined below.
 
     def send_meme(self, update):
 
@@ -134,5 +139,10 @@ class Bot:
 
         tampin_paljastuspaiva_2019 = 1555452000
         message = funcs.time_until(tampin_paljastuspaiva_2019)
+        chat_id = update['message']['chat']['id']
+        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+
+    def send_message(self, update, message):
+
         chat_id = update['message']['chat']['id']
         requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
