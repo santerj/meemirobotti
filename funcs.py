@@ -141,7 +141,7 @@ def scramble(text):
     scrambled_text = ''
 
     for i in range(len(text)):
-        chance = randrange(11)
+        chance = randrange(13)
         if chance == 0:
             char = ALPHABET[randrange(len(ALPHABET))]
         else:

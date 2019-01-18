@@ -5,12 +5,8 @@ from time import time, sleep
 import requests
 
 import config
-from funcs import decide
-from funcs import get_subreddits
-from funcs import scramble
-from funcs import test_subreddit_validity
-from funcs import uptime
-from reddit_handler import get_url
+import funcs
+import reddit_handler
 
 TOKEN = config.token
 CLIENT_ID = config.client_id
@@ -24,9 +20,8 @@ class Bot:
 
     def __init__(self):
 
-        # startup()
         self.__url = 'https://api.telegram.org/bot%s/' % TOKEN
-        self.__multireddit = get_subreddits()
+        self.__multireddit = funcs.get_subreddits()
         self.__offset = 0
         self.__last_update = 0
         self.__start_time = time()
@@ -66,7 +61,7 @@ class Bot:
             # New offset to automatically clear the queue at tg server-side
             self.__offset = update['update_id'] + 1
 
-        # Long polling
+        # Polling
         sleep(SLEEP)
 
     def process_update(self, update):
@@ -75,6 +70,7 @@ class Bot:
         # commands should be specified here
 
         if update['message']['entities'][0]['type'] != 'bot_command':
+            # only process messages that begin with /
             pass
 
         elif '/meme' in update['message']['text']:
@@ -84,10 +80,8 @@ class Bot:
         elif '/help' in update['message']['text']:
             self.send_help(update)
 
-        # important: admin tools
-        elif update['message']['from']['id'] == self.__admin_id and\
-                '/admin' in update['message']['text']:
-            self.admin(update)
+        elif '/stats' in update['message']['text']:
+            self.stats(update)
 
         elif update['message']['reply_to_message']:
             if '/kaannos' in update['message']['text']:
@@ -107,70 +101,27 @@ class Bot:
     def send_help(self, update):
 
         if update['message']['from']['is_bot'] is False:
-            message = decide(update['message']['text'])
+            message = funcs.decide(update['message']['text'])
             chat_id = update['message']['chat']['id']
             requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
 
     def new_meme(self):
         # Refresh the meme
         try:
-            self.__link, self.__title, self.__sub = get_url(multireddit=self.__multireddit, client_id=CLIENT_ID,
-                                                            client_secret=SECRET, user_agent=USER_AGENT)
+            self.__link, self.__title, self.__sub = reddit_handler.get_url(
+                multireddit=self.__multireddit, client_id=CLIENT_ID, client_secret=SECRET, user_agent=USER_AGENT
+            )
         except TypeError:
             self.new_meme()
 
-    def admin(self, update):
-        keyword = '/admin '
+    def stats(self, update):
 
-        line = update['message']['text']
-        line = line[len(keyword):]
-        message = ""
-
-        if line == "":
-            message = "show: show current subreddits \n" \
-                      "add: add a subreddit \n" \
-                      "remove: remove a subreddit \n" \
-                      "reset: restore default subreddits \n" \
-                      "stats: show stats \n"
-
-        elif line == "show":
-            for item in self.__multireddit:
-                message = message + '\n' + item
-
-        elif 'remove ' in line:
-            target = line[len('remove '):]
-            if target in self.__multireddit:
-                self.__multireddit.remove(target)
-                message = "removed " + target
-            else:
-                message = "error: subreddit not found"
-
-        elif 'add ' in line:
-            target = line[len('add '):]
-
-            if target not in self.__multireddit:
-                if not test_subreddit_validity(target):
-                    message = "error: subreddit doesn't exist or reddit not responsive"
-                else:
-                    self.__multireddit.append(target)
-                    # self.__multireddit = sorted(self.__multireddit(), key=lambda s: s.casefold())
-                    message = "added " + target
-
-            else:
-                message = target + " already exists"
-
-        elif line == 'reset':
-            self.__multireddit = get_subreddits()
-            message = "default subreddits restored"
-
-        elif line == 'stats':
-            message = uptime(time() - self.__start_time)
-            message = message + str(self.__memes_sent) + " memes sent \n"
-
+        message = funcs.uptime(time() - self.__start_time)
+        message = message + str(self.__memes_sent) + " memes sent \n"
         chat_id = update['message']['chat']['id']
         requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
 
     def translate(self, update):
-        message = scramble(update['message']['reply_to_message']['text'])
+        message = funcs.scramble(update['message']['reply_to_message']['text'])
         chat_id = update['message']['chat']['id']
         requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
