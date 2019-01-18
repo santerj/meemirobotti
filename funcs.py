@@ -8,11 +8,6 @@ from random import randrange, getrandbits
 
 # file containing the default subreddits
 DEFAULT = "default_subreddits.txt"
-ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-            'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
-            'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-            'y', 'z', 'å', 'ä', 'ö', '0', '3', '7',
-            '8', '9', ' ', ',', '']
 
 CLOSEST_SYMBOLS_QWERTY = {
 
