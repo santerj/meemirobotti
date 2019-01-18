@@ -43,7 +43,7 @@ CLOSEST_SYMBOLS_QWERTY = {
     'm': [' ', ',', 'j', 'k', 'n'],
     'n': [' ', 'b', 'h', 'j', 'm'],
     'o': ['i', 'k', 'l', 'p', 'ö'],
-    'p': ['+', 'o', 'ä', 'å', 'ö'],
+    'p': ['o', 'ä', 'å', 'ö'],
     'q': ['a', 's', 'w'],
     'r': ['d', 'e', 'f', 'g', 't'],
     's': ['a', 'd', 'e', 'q', 'w', 'x', 'z'],
@@ -222,10 +222,12 @@ def scramble(text):
             continue
 
         # Every n character on average will be misclicked (value from testing).
-        if len(text) < 30:
+        # People capable of typing longer messages are typically less likely
+        # to be super intoxicated.
+        if len(text) < 50:
             chance = randrange(13)
         else:
-            chance = randrange(20)
+            chance = randrange(23)
 
         if chance == 0:
             typos = CLOSEST_SYMBOLS_QWERTY[text[i]]
@@ -235,6 +237,10 @@ def scramble(text):
             char = text[i]
 
         scrambled_text = scrambled_text + char
+
+    if scrambled_text == text:
+        # Slight recursion to avoid cases where no characters were changed (somewhat volatile)
+        scrambled_text = scramble(text)
 
     return scrambled_text
 
