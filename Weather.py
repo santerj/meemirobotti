@@ -46,7 +46,6 @@ class Weather:
                 # something failed
                 return
             else:
-                print('New weather request')
                 self.refresh(json)
 
     def refresh(self, json):
