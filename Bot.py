@@ -126,9 +126,11 @@ class Bot:
     def stats(self, update):
 
         message = funcs.uptime(time() - self.__start_time)
-        message = message + str(self.__memes_sent) + " memes sent \n"
-        chat_id = update['message']['chat']['id']
-        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+        message = message + str(self.__memes_sent) + " memes sent \n" + \
+                            str(self.__help_sent) + " helps sent \n" + \
+                            str(self.__translations) + " translations"
+
+        self.send_message(update, message)
 
     def translate(self, update):
 
