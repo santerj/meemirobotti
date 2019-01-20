@@ -24,6 +24,7 @@ class Bot:
         self.__offset = 0
         self.__last_update = 0
 
+        # stats
         self.__start_time = time()
         self.__memes_sent = 0
         self.__help_sent = 0
@@ -62,6 +63,11 @@ class Bot:
 
             # New offset to automatically clear the queue at tg server-side
             self.__offset = update['update_id'] + 1
+
+    def send_message(self, update, message):
+
+        chat_id = update['message']['chat']['id']
+        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
 
     def process_update(self, update):
 
@@ -102,8 +108,7 @@ class Bot:
                 and update['message']['from']['is_bot'] is False:
 
             message = 'r/' + self.__sub + ':' '\n' + self.__title + '\n' + self.__link
-            chat_id = update['message']['chat']['id']
-            requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+            self.send_message(update, message)
             # Refresh meme
             self.new_meme()
 
@@ -111,8 +116,7 @@ class Bot:
 
         if update['message']['from']['is_bot'] is False:
             message = funcs.decide(update['message']['text'])
-            chat_id = update['message']['chat']['id']
-            requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+            self.send_message(update, message)
 
     def new_meme(self):
         # Refresh the meme
@@ -135,17 +139,10 @@ class Bot:
     def translate(self, update):
 
         message = funcs.scramble(update['message']['reply_to_message']['text'])
-        chat_id = update['message']['chat']['id']
-        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+        self.send_message(update, message)
 
     def wappu(self, update):
 
         tampin_paljastuspaiva_2019 = 1555452000
         message = funcs.time_until(tampin_paljastuspaiva_2019)
-        chat_id = update['message']['chat']['id']
-        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
-
-    def send_message(self, update, message):
-
-        chat_id = update['message']['chat']['id']
-        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+        self.send_message(update, message)
