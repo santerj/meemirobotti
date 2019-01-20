@@ -237,7 +237,7 @@ def scramble(text):
             else:
                 char = text[i]
 
-        scrambled_text = scrambled_text + char
+        scrambled_text += char
 
     if scrambled_text == text:
         # Recursion to avoid cases where no characters were changed (somewhat volatile)

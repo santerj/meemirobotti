@@ -1,6 +1,6 @@
 import json
 from socket import gaierror
-from time import time, sleep
+from time import time
 
 import requests
 
@@ -13,7 +13,6 @@ CLIENT_ID = config.client_id
 SECRET = config.secret
 USER_AGENT = config.user_agent
 ADMIN_ID = config.admin_id
-SLEEP = 1.5
 
 
 class Bot:
@@ -24,8 +23,11 @@ class Bot:
         self.__multireddit = funcs.get_subreddits()
         self.__offset = 0
         self.__last_update = 0
+
         self.__start_time = time()
         self.__memes_sent = 0
+        self.__help_sent = 0
+        self.__translations = 0
 
         # meme
         self.__link = ""
@@ -61,9 +63,6 @@ class Bot:
             # New offset to automatically clear the queue at tg server-side
             self.__offset = update['update_id'] + 1
 
-        # Polling
-        sleep(SLEEP)
-
     def process_update(self, update):
 
         # A command interpreter of sorts - all used Telegram bot commands should be specified here
@@ -78,6 +77,7 @@ class Bot:
 
         elif '/help' in update['message']['text']:
             self.send_help(update)
+            self.__help_sent += 1
 
         elif '/stats' in update['message']['text']:
             self.stats(update)
@@ -88,6 +88,7 @@ class Bot:
         elif '/kaannos' in update['message']['text']:
             if 'reply_to_message' in update['message'].keys():
                 self.translate(update)
+                self.__translations += 1
             else:
                 self.send_message(update=update, message=
                     '/kaannos: vastaa johonkin viestiin komennolla /kaannos. Ei toimi muiden bottien viesteihin.'
