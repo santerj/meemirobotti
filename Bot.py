@@ -96,9 +96,8 @@ class Bot:
                 self.translate(update)
                 self.__translations += 1
             else:
-                self.send_message(update=update, message=
-                    '/kaannos: vastaa johonkin viestiin komennolla /kaannos. Ei toimi muiden bottien viesteihin.'
-                )
+                message = '/kaannos: vastaa johonkin viestiin komennolla /kaannos. Ei toimi muiden bottien viesteihin.'
+                self.send_message(update, message)
 
     #                                  method bodies defined below.
 
