@@ -1,8 +1,10 @@
 import time
 from dataclasses import dataclass
+
 import requests
 
 import config
+import weather_codes_FI
 
 KEY = config.weather_api
 # Unique city id's for OpenWeatherMap
@@ -15,8 +17,7 @@ class City:
     name: str
     temp: float = -1.0
     wind: float = -1.0
-    weather_main: str = 'null'
-    weather_desc: str = 'null'
+    weather_id: int = -1
 
 
 class Weather:
@@ -45,6 +46,7 @@ class Weather:
                 # something failed
                 return
             else:
+                print('New weather request')
                 self.refresh(json)
 
     def refresh(self, json):
@@ -53,13 +55,37 @@ class Weather:
         station = json['list'][0]
 
         temp = station['main']['temp']
-        weather_main = station['weather'][0]['main']
-        weather_desc = station['weather'][0]['description']
         wind = station['wind']['speed']
+        weather_id = station['weather'][0]['id']
 
         for city in self.__cities:
             if name == city.name:
                 city.temp = temp
-                city.weather_main = weather_main
-                city.weather_desc = weather_desc
                 city.wind = wind
+                city.weather_id = weather_id
+
+    def parse(self, city, message=''):
+
+        description = weather_codes_FI.codes[city.weather_id]
+
+        if city.name == 'Tampere':
+            message += 'Tampereella '
+        elif city.name == 'Turku':
+            message += 'Turussa '
+        else:
+            return ''
+
+        message += description + '. '
+        return message
+
+    def get_message(self):
+        # Current API gives max of 60 request/hour.
+        # Get new request only if previous was over 5 minutes ago,
+        # just to be on the safe side.
+        if time.time() - self.__last_call > 300:
+            self.call()
+
+        msg = self.parse(self.__tampere)
+        msg = self.parse(self.__turku, msg)
+
+        return msg

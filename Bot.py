@@ -7,6 +7,7 @@ import requests
 import config
 import funcs
 import reddit_handler
+import Weather
 
 TOKEN = config.token
 CLIENT_ID = config.client_id
@@ -35,6 +36,9 @@ class Bot:
         self.__title = ""
         self.__sub = ""
         self.new_meme()
+
+        # weather
+        self.__weather = Weather.Weather()
 
         # for admin tools
         self.__admin_id = ADMIN_ID
@@ -72,26 +76,30 @@ class Bot:
     def process_update(self, update):
 
         # A command interpreter of sorts - all used Telegram bot commands should be specified here
+        msg = update['message']['text']
 
         if update['message']['entities'][0]['type'] != 'bot_command':
             # only process messages that begin with /
             pass
 
-        elif '/meme' in update['message']['text']:
+        elif '/meme' in msg:
             self.send_meme(update)
             self.__memes_sent += 1
 
-        elif '/help' in update['message']['text']:
+        elif '/help' in msg:
             self.send_help(update)
             self.__help_sent += 1
 
-        elif '/stats' in update['message']['text']:
+        elif '/stats' in msg:
             self.stats(update)
 
-        elif '/wappuun' in update['message']['text']:
+        elif '/wappuun' in msg:
             self.wappu(update)
 
-        elif '/kaannos' in update['message']['text']:
+        elif '/keli' in msg:
+            self.send_weather(update)
+
+        elif '/kaannos' in msg:
             if 'reply_to_message' in update['message'].keys():
                 self.translate(update)
                 self.__translations += 1
@@ -144,4 +152,9 @@ class Bot:
 
         tampin_paljastuspaiva_2019 = 1555452000
         message = funcs.time_until(tampin_paljastuspaiva_2019)
+        self.send_message(update, message)
+
+    def send_weather(self, update):
+
+        message = self.__weather.get_message()
         self.send_message(update, message)
