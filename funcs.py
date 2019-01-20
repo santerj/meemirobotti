@@ -219,27 +219,28 @@ def scramble(text):
 
         if text[i] not in CLOSEST_SYMBOLS_QWERTY.keys():
             # Current character is something like an emoji or something
-            continue
-
-        # Every n character on average will be misclicked (value from testing).
-        # People capable of typing longer messages are typically less likely
-        # to be super intoxicated.
-        if len(text) < 50:
-            chance = randrange(13)
-        else:
-            chance = randrange(23)
-
-        if chance == 0:
-            typos = CLOSEST_SYMBOLS_QWERTY[text[i]]
-            rnd = randrange(len(typos))
-            char = typos[rnd]
-        else:
             char = text[i]
+
+        else:
+            # Every n character on average will be misclicked (value from testing).
+            # People capable of typing longer messages are typically less likely
+            # to be super intoxicated.
+            if len(text) < 50:
+                chance = randrange(13)
+            else:
+                chance = randrange(23)
+
+            if chance == 0:
+                typos = CLOSEST_SYMBOLS_QWERTY[text[i]]
+                rnd = randrange(len(typos))
+                char = typos[rnd]
+            else:
+                char = text[i]
 
         scrambled_text = scrambled_text + char
 
     if scrambled_text == text:
-        # Slight recursion to avoid cases where no characters were changed (somewhat volatile)
+        # Recursion to avoid cases where no characters were changed (somewhat volatile)
         scrambled_text = scramble(text)
 
     return scrambled_text
