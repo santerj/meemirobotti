@@ -96,15 +96,15 @@ class Bot:
                 self.translate(update)
                 self.__translations += 1
             else:
-                message = '/kaannos: vastaa johonkin viestiin komennolla /kaannos. Ei toimi muiden bottien viesteihin.'
+                message = '/kaannos: vastaa johonkin viestiin komennolla ' \
+                          '/kaannos. Ei toimi muiden bottien viesteihin.'
                 self.send_message(update, message)
 
     #                                  method bodies defined below.
 
     def send_meme(self, update):
 
-        if update['message']['entities'][0]['type'] == 'bot_command' \
-                and update['message']['from']['is_bot'] is False:
+        if update['message']['entities'][0]['type'] == 'bot_command':
 
             message = 'r/' + self.__sub + ':' '\n' + self.__title + '\n' + self.__link
             self.send_message(update, message)
@@ -130,8 +130,8 @@ class Bot:
 
         message = funcs.uptime(time() - self.__start_time)
         message = message + str(self.__memes_sent) + " memes sent \n" + \
-                            str(self.__help_sent) + " helps sent \n" + \
-                            str(self.__translations) + " translations"
+            str(self.__help_sent) + " helps sent \n" + \
+            str(self.__translations) + " translations"
 
         self.send_message(update, message)
 

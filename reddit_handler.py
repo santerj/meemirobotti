@@ -4,6 +4,7 @@ import random
 
 FILTER = 'day'
 
+
 def get_url(multireddit, client_id, client_secret, user_agent):
     """RETURNS:
         link:str
