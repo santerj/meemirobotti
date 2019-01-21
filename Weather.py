@@ -77,10 +77,11 @@ class Weather:
         return message
 
     def get_message(self):
-        # Current API gives max of 60 request/hour.
-        # Get new request only if previous was over 5 minutes ago,
-        # just to be on the safe side.
-        if time.time() - self.__last_call > 300:
+        # OpenWeatherMap refreshes max every 10 minutes, so
+        # no need to make new request more often than that.
+        # Also, API gives 60 requests per hour so this gives
+        # extra safety
+        if time.time() - self.__last_call > 600:
             self.call()
 
         msg = self.parse(self.__tampere)
