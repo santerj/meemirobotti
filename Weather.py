@@ -34,15 +34,15 @@ class Weather:
     def call(self):
 
         self.__last_call = time.time()
-        url_tampere = f"http://api.openweathermap.org/data/2.5/forecast?id={TAMPERE}&APPID={KEY}"
-        url_turku = f"http://api.openweathermap.org/data/2.5/forecast?id={TURKU}&APPID={KEY}"
+        url_tampere = f"http://api.openweathermap.org/data/2.5/weather?id={TAMPERE}&APPID={KEY}"
+        url_turku = f"http://api.openweathermap.org/data/2.5/weather?id={TURKU}&APPID={KEY}"
 
         json_tampere = requests.get(url_tampere).json()
         json_turku = requests.get(url_turku).json()
 
         cities = [json_tampere, json_turku]
         for json in cities:
-            if json['cod'] != '200':
+            if json['cod'] != 200:
                 # something failed
                 return
             else:
@@ -50,12 +50,11 @@ class Weather:
 
     def refresh(self, json):
 
-        name = json['city']['name']
-        station = json['list'][0]
+        name = json['name']
 
-        temp = station['main']['temp']
-        wind = station['wind']['speed']
-        weather_id = station['weather'][0]['id']
+        temp = json['main']['temp']
+        wind = json['wind']['speed']
+        weather_id = json['weather'][0]['id']
 
         for city in self.__cities:
             if name == city.name:

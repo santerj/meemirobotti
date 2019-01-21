@@ -60,7 +60,7 @@ codes = {
     781: 'kaikki toivo on mennyttä',
 
     # Group 800: Clear
-    800: 'on hyvä keli',
+    800: 'on selkeää',
 
     # Group 80x: Clouds
     801: 'on vähän pilviä',
