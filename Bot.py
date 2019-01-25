@@ -4,6 +4,7 @@ from time import time
 
 import requests
 
+import camera
 import config
 import funcs
 import reddit_handler
@@ -78,6 +79,7 @@ class Bot:
         # A command interpreter of sorts - all used Telegram bot commands should be specified here
         msg = update['message']['text']
 
+        # TODO: this can probably be removed?
         if update['message']['entities'][0]['type'] != 'bot_command':
             # only process messages that begin with /
             pass
@@ -107,6 +109,9 @@ class Bot:
                 message = '/kaannos: vastaa johonkin viestiin komennolla ' \
                           '/kaannos. Ei toimi muiden bottien viesteihin.'
                 self.send_message(update, message)
+
+        elif '/tumppi' in msg:
+            self.send_tumppi(update)
 
     #                                  method bodies defined below.
 
@@ -158,3 +163,21 @@ class Bot:
 
         message = self.__weather.get_message()
         self.send_message(update, message)
+
+    def send_tumppi(self, update):
+
+        if update['message']['chat']['id'] in config.friendly:
+
+            try:
+                camera.new_image()  # refresh 'tumppi.jpeg'
+
+                files = {'photo': ('tumppi.jpeg', open('tumppi.jpeg', 'rb'), 'photo/jpeg', {'Expires': '0'})}
+
+                chat_id = update['message']['chat']['id']
+                requests.post(self.__url + 'sendPhoto?', params=dict(chat_id=chat_id), files=files)
+
+            except:  # TODO:
+                self.send_message(update, 'Hups! Tämä toiminto ei ole käytössä.')
+
+        else:
+            self.send_message(update, 'Hups! Tämä toiminto ei ole käytössä.')

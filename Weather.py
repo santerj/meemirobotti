@@ -27,7 +27,7 @@ class Weather:
         self.__last_call = 0
         self.__tampere = City('Tampere')
         self.__turku = City('Turku')
-        self.__cities = [self.__tampere, self.__turku]
+        self.__cities = (self.__tampere, self.__turku)
 
         self.call()  # refresh above members
 
@@ -63,6 +63,9 @@ class Weather:
                 city.weather_id = weather_id
 
     def parse(self, city, message=''):
+
+        if city.weather_id not in weather_codes_FI.codes.keys():
+            return ''
 
         description = weather_codes_FI.codes[city.weather_id]
 
