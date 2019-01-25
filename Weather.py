@@ -40,7 +40,7 @@ class Weather:
         json_tampere = requests.get(url_tampere).json()
         json_turku = requests.get(url_turku).json()
 
-        cities = [json_tampere, json_turku]
+        cities = (json_tampere, json_turku)
         for json in cities:
             if json['cod'] != 200:
                 # something failed
@@ -67,16 +67,19 @@ class Weather:
         if city.weather_id not in weather_codes_FI.codes.keys():
             return ''
 
+        # conversion from kelvin to celsius
+        temp_celsius = city.temp - 273.15
+        temp_celsius = format(temp_celsius, '.1f')
+
         description = weather_codes_FI.codes[city.weather_id]
 
-        if city.name == 'Tampere':
-            message += 'Tampereella '
-        elif city.name == 'Turku':
-            message += 'Turussa '
-        else:
-            return ''
+        message += f"{city.name}: {temp_celsius}°C ja {description}."
 
-        message += description + '. '
+        if city.wind > 6:
+            message += f" Tuulta {city.wind} m/s."
+        else:
+            message += '\n'
+
         return message
 
     def get_message(self):

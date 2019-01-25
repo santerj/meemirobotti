@@ -28,7 +28,7 @@ codes = {
     501: 'sataa jonkin verran',
     502: 'sataa kovaa',
     503: 'sataa täysiä',
-    504: 'on raamatullinen sadekeli',
+    504: 'raamatullinen sadekeli',
     511: 'sataa jääkylmää vettä niskaan',
     520: 'satelee vettä',
     521: 'tulee vettä taivaalta',
@@ -40,32 +40,32 @@ codes = {
     601: 'sataa lunta',
     602: 'sataa kovaa lunta',
     611: 'sataa räntää',
-    612: 'on räntäkuuroja',
+    612: 'räntäkuuroja',
     615: 'tulee räntää',
     616: 'tulee räntää taivaalta',
-    620: 'on pikku lumisade',
+    620: 'pikku lumisade',
     621: 'tulee lunta',
-    622: 'on perkeleellinen lumisade',
+    622: 'perkeleellinen lumisade',
 
     # Group 7xx: Atmosphere
-    701: 'on sumua',
-    711: 'on savua ilmassa',
-    721: 'on usvaa',
+    701: 'sumua',
+    711: 'savua ilmassa',
+    721: 'usvaa',
     731: 'hiekka- ja pölypyörteitä???',
-    741: 'on sumuista',
-    751: 'on maailmanloppu',
-    761: 'on pölyä joka paikassa',
-    762: 'on tulivuorenpurkaus',
-    771: 'on tuulenpuuskia',
-    781: 'kaikki toivo on mennyttä',
+    741: 'sumuista',
+    751: 'maailmanloppu',
+    761: 'pölyä joka paikassa',
+    762: 'tulivuorenpurkaus',
+    771: 'tuulenpuuskia',
+    781: 'täysi maailmanloppu',
 
     # Group 800: Clear
-    800: 'on selkeää',
+    800: 'selkeää',
 
     # Group 80x: Clouds
-    801: 'on vähän pilviä',
-    802: 'on siellä täällä pilviä',
+    801: 'vähän pilviä',
+    802: 'siellä täällä pilviä',
     803: 'pilvipeite repeilee :-D',
-    804: 'on pilvistä'
+    804: 'pilvistä'
 
 }
