@@ -62,7 +62,8 @@ class Weather:
                 city.wind = wind
                 city.weather_id = weather_id
 
-    def parse(self, city, message=''):
+    @staticmethod
+    def parse(city, message=''):
 
         if city.weather_id not in weather_codes_FI.codes.keys():
             return ''
@@ -75,7 +76,7 @@ class Weather:
 
         message += f"{city.name}: {temp_celsius}°C ja {description}."
 
-        if city.wind > 6:
+        if city.wind > 5.0:
             message += f" Tuulta {city.wind} m/s."
         else:
             message += '\n'
@@ -88,6 +89,7 @@ class Weather:
         # Also, API gives 60 requests per hour so this gives
         # extra safety
         if time.time() - self.__last_call > 600:
+            print('new call')
             self.call()
 
         msg = self.parse(self.__tampere)
