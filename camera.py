@@ -14,7 +14,7 @@ def new_image():
     ret, frame = cap.read()
 
     # frame = np.rot90(frame, k=1)  # rotation
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # convert to RGB
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # convert to B&W -- use COLOR_BGR2RGB for RGB image
 
     img = Image.fromarray(frame)
     img.save('tumppi.jpeg')
