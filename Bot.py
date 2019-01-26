@@ -4,6 +4,7 @@ from time import time
 
 import requests
 
+import forecast
 import camera
 import config
 import funcs
@@ -113,6 +114,9 @@ class Bot:
         elif '/tumppi' in msg:
             self.send_tumppi(update)
 
+        elif '/ennuste' in msg:
+            self.send_forecast(update)
+
     #                                  method bodies defined below.
 
     def send_meme(self, update):
@@ -181,3 +185,16 @@ class Bot:
 
         else:
             self.send_message(update, 'Hups! Tämä toiminto ei ole käytössä.')
+
+    def send_forecast(self, update):
+
+        try:
+            forecast.forecast()  # refresh 'ennuste.png'
+
+            files = {'photo': ('ennuste.png', open('ennuste.png', 'rb'), 'photo/png', {'Expires': '0'})}
+
+            chat_id = update['message']['chat']['id']
+            requests.post(self.__url + 'sendPhoto?', params=dict(chat_id=chat_id), files=files)
+
+        except:
+            return
