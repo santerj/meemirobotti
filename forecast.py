@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from random import randint
 
+
 def forecast():
 
     multiplier = randint(1, 5)
@@ -44,8 +45,8 @@ def forecast():
                 'Vauhti'
                 )
 
-    #ax.set_yticklabels([])
-    #ax.set_xticklabels([])
+    # ax.set_yticklabels([])
+    # ax.set_xticklabels([])
 
     x_label = x_labels[randint(0, len(x_labels)-1)]
     y_label = y_labels[randint(0, len(y_labels)-1)]
