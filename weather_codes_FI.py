@@ -36,7 +36,7 @@ codes = {
     531: 'täysi vesisade päällä',
 
     # Group 6xx: Snow
-    600: 'tuiskuttaa vähän lunta',
+    600: 'vähäinen lumisade',
     601: 'sataa lunta',
     602: 'sataa kovaa lunta',
     611: 'sataa räntää',
