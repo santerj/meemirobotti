@@ -5,7 +5,7 @@ from time import time
 import requests
 
 import forecast
-import camera
+#import camera
 import config
 import funcs
 import reddit_handler
@@ -170,6 +170,7 @@ class Bot:
 
     def send_tumppi(self, update):
 
+        """
         if update['message']['chat']['id'] in config.friendly:
 
             try:
@@ -185,6 +186,8 @@ class Bot:
 
         else:
             self.send_message(update, 'Hups! Tämä toiminto ei ole käytössä.')
+        """
+        self.send_message(update=update, message='Hups! Tämä toiminto ei ole käytössä.')
 
     def send_forecast(self, update):
 
