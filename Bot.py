@@ -5,7 +5,7 @@ from time import time
 import requests
 
 import forecast
-#import camera
+# import camera
 import config
 import funcs
 import reddit_handler
@@ -31,6 +31,7 @@ class Bot:
         self.__start_time = time()
         self.__memes_sent = 0
         self.__help_sent = 0
+        self.__kelis_sent = 0
         self.__translations = 0
 
         # meme
@@ -42,8 +43,9 @@ class Bot:
         # weather
         self.__weather = Weather.Weather()
 
-        # for admin tools
-        self.__admin_id = ADMIN_ID
+        # ban memes
+        self.__memes_banned = False
+        self.__last_try = 0
 
     def get_updates(self):
 
@@ -73,31 +75,24 @@ class Bot:
     def send_message(self, update, message):
 
         chat_id = update['message']['chat']['id']
-        requests.get(self.__url + 'sendMessage', params=dict(chat_id=chat_id, text=message))
+        params = dict(chat_id=chat_id, text=message, disable_notification=True)
+        requests.get(self.__url + 'sendMessage', params=params)
 
     def process_update(self, update):
 
         # A command interpreter of sorts - all used Telegram bot commands should be specified here
         msg = update['message']['text']
 
-        # TODO: this can probably be removed?
-        if update['message']['entities'][0]['type'] != 'bot_command':
-            # only process messages that begin with /
-            pass
-
-        elif '/meme' in msg:
-            self.send_meme(update)
-            self.__memes_sent += 1
-
-        elif '/help' in msg:
+        if '/help' in msg:
             self.send_help(update)
             self.__help_sent += 1
 
+        if '/meme' in msg:
+            self.send_meme(update)
+            self.__memes_sent += 1
+
         elif '/stats' in msg:
             self.stats(update)
-
-        elif '/wappuun' in msg:
-            self.wappu(update)
 
         elif '/keli' in msg:
             self.send_weather(update)
@@ -120,6 +115,12 @@ class Bot:
     #                                  method bodies defined below.
 
     def send_meme(self, update):
+
+        if self.__memes_banned and update["chat"]["id"] is config.paansarkijat:
+            if time() - self.__last_try < 86400:
+                return
+            else:
+                self.__memes_banned = False
 
         if update['message']['entities'][0]['type'] == 'bot_command':
 
@@ -155,12 +156,6 @@ class Bot:
     def translate(self, update):
 
         message = funcs.scramble(update['message']['reply_to_message']['text'])
-        self.send_message(update, message)
-
-    def wappu(self, update):
-
-        tampin_paljastuspaiva_2019 = 1555452000
-        message = funcs.time_until(tampin_paljastuspaiva_2019)
         self.send_message(update, message)
 
     def send_weather(self, update):

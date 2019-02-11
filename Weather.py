@@ -77,7 +77,7 @@ class Weather:
         message += f"{city.name}: {temp_celsius}°C ja {description}."
 
         if city.wind > 5.0:
-            message += f" Tuulta {city.wind} m/s."
+            message += f" Tuulta {city.wind} m/s.\n"
         else:
             message += '\n'
 
@@ -89,7 +89,6 @@ class Weather:
         # Also, API gives 60 requests per hour so this gives
         # extra safety
         if time.time() - self.__last_call > 600:
-            print('new call')
             self.call()
 
         msg = self.parse(self.__tampere)
