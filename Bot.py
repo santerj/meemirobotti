@@ -80,6 +80,9 @@ class Bot:
 
     def process_update(self, update):
 
+        if not update['message']['text']:
+            return
+
         # A command interpreter of sorts - all used Telegram bot commands should be specified here
         msg = update['message']['text']
 

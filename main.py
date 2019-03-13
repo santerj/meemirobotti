@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from time import sleep
 
 from Bot import Bot
@@ -13,7 +15,8 @@ def main():
             tg.get_updates()
             sleep(1.5)
         except ConnectionError:
-            sleep(10)
+            sleep(5)
+            main()
 
 
 if __name__ == "__main__":

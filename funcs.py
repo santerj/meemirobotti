@@ -4,7 +4,7 @@ import prawcore
 import json
 import requests
 from time import time, sleep
-from random import randrange, getrandbits
+from random import choice, getrandbits, randint
 
 # file containing the default subreddits
 DEFAULT = "default_subreddits.txt"
@@ -107,8 +107,8 @@ def decide(msg):
     choices = msg.split(separator)
     choices = [word for word in choices if word not in ["", " "]]
     choices = [word.strip(" ") for word in choices]
-    rnd = randrange(0, len(choices))
-    return beginning + choices[rnd]
+    choices = [word.rstrip(" ") for word in choices]
+    return beginning + choice(choices)
 
 
 def uptime(timestamp):
@@ -245,21 +245,10 @@ def scramble(text):
     return scrambled_text
 
 
-def time_until(timestamp):
+def find_choice(msg, array):
+    msg = msg.lower()
 
-    remaining = timestamp - time()
-
-    if remaining < 0:
-        message = 'Wappuun on vielä pitkä, pitkä aika.'
-        return message
-
-    days = int(remaining // 86400)
-    remaining = remaining - (days * 86400)
-    hours = int(remaining // 3600)
-    remaining = remaining - (hours * 3600)
-    minutes = int(remaining // 60)
-    remaining = remaining - (minutes * 60)
-    seconds = int(remaining)
-
-    message = f"{days} päivää, {hours} tuntia, {minutes} minuuttia ja {seconds} sekuntia."
-    return message
+    for thing in array:
+        if thing in msg:
+            return thing
+    return False
