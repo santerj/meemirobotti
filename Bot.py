@@ -29,10 +29,7 @@ class Bot:
 
         # stats
         self.__start_time = time()
-        self.__memes_sent = 0
-        self.__help_sent = 0
-        self.__kelis_sent = 0
-        self.__translations = 0
+        self.__messages_sent = 0
 
         # meme
         self.__link = ""
@@ -43,10 +40,6 @@ class Bot:
         # weather
         self.__weather = Weather.Weather()
 
-        # ban memes
-        self.__memes_banned = False
-        self.__last_try = 0
-
     def get_updates(self):
 
         try:
@@ -54,6 +47,7 @@ class Bot:
         except gaierror:
             updates = json.loads(requests.get(self.__url + 'getUpdates').content)
 
+        # print(updates)
         for update in updates['result']:
 
             # Refresh this
@@ -77,6 +71,7 @@ class Bot:
         chat_id = update['message']['chat']['id']
         params = dict(chat_id=chat_id, text=message, disable_notification=True)
         requests.get(self.__url + 'sendMessage', params=params)
+        self.__messages_sent += 1
 
     def process_update(self, update):
 
@@ -88,11 +83,9 @@ class Bot:
 
         if '/help' in msg:
             self.send_help(update)
-            self.__help_sent += 1
 
-        if '/meme' in msg:
+        elif '/meme' in msg:
             self.send_meme(update)
-            self.__memes_sent += 1
 
         elif '/stats' in msg:
             self.stats(update)
@@ -103,7 +96,6 @@ class Bot:
         elif '/kaannos' in msg:
             if 'reply_to_message' in update['message'].keys():
                 self.translate(update)
-                self.__translations += 1
             else:
                 message = '/kaannos: vastaa johonkin viestiin komennolla ' \
                           '/kaannos. Ei toimi muiden bottien viesteihin.'
@@ -115,15 +107,12 @@ class Bot:
         elif '/ennuste' in msg:
             self.send_forecast(update)
 
+        elif '/ping' in msg:
+            self.send_ping(update)
+
     #                                  method bodies defined below.
 
     def send_meme(self, update):
-
-        if self.__memes_banned and update["chat"]["id"] is config.paansarkijat:
-            if time() - self.__last_try < 86400:
-                return
-            else:
-                self.__memes_banned = False
 
         if update['message']['entities'][0]['type'] == 'bot_command':
 
@@ -150,9 +139,7 @@ class Bot:
     def stats(self, update):
 
         message = funcs.uptime(time() - self.__start_time)
-        message = message + str(self.__memes_sent) + " memes sent \n" + \
-            str(self.__help_sent) + " helps sent \n" + \
-            str(self.__translations) + " translations"
+        message = f"{message} \n\n{self.__messages_sent} messages"
 
         self.send_message(update, message)
 
@@ -199,3 +186,8 @@ class Bot:
 
         except:
             return
+
+    def send_ping(self, update):
+
+        message = 'pong'
+        self.send_message(update, message)

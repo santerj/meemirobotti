@@ -121,11 +121,10 @@ def uptime(timestamp):
     timestamp = timestamp - (minutes * 60)
     seconds = int(timestamp)
 
-    message = f"Current uptime:\n" \
-              f"{days} days\n" \
+    message = f"{days} days\n" \
               f"{hours} hours\n" \
               f"{minutes} minutes\n" \
-              f"{seconds} seconds\n\n"
+              f"{seconds} seconds"
 
     return message
 
@@ -225,13 +224,13 @@ def scramble(text):
             # People capable of typing longer messages are typically less likely
             # to be super intoxicated.
             if len(text) < 50:
-                chance = randrange(13)
+                chance = randint(0, 13)
             else:
-                chance = randrange(23)
+                chance = randint(0, 23)
 
             if chance == 0:
                 typos = closest_symbols_qwerty[text[i]]
-                rnd = randrange(len(typos))
+                rnd = randint(0, len(typos))
                 char = typos[rnd]
             else:
                 char = text[i]

@@ -7,6 +7,8 @@ def forecast():
 
     multiplier = randint(1, 5)
 
+    plt.xkcd()
+
     fig, ax = plt.subplots()
     ax.set_xlim(0, 20)
     ax.set_ylim(0, multiplier*10)
@@ -33,6 +35,9 @@ def forecast():
                 'Pulssi',
                 'Ruumiinlämpö',
                 'Tärinä',
+
+
+
                 'Pärinä',
                 'Verenkierto',
                 'Opintopisteet',

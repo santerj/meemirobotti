@@ -11,12 +11,9 @@ def main():
     tg = Bot()
 
     while True:
-        try:
-            tg.get_updates()
-            sleep(1.5)
-        except ConnectionError:
-            sleep(5)
-            main()
+        tg.get_updates()
+        sleep(1.5)
+        # except ConnectionError:
 
 
 if __name__ == "__main__":
