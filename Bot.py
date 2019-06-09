@@ -1,5 +1,5 @@
 import json
-from socket import gaierror
+import socket
 from time import time
 
 import requests
@@ -44,10 +44,18 @@ class Bot:
 
         try:
             updates = json.loads(requests.get(self.__url + 'getUpdates?offset=' + str(self.__offset)).content)
-        except gaierror:
-            updates = json.loads(requests.get(self.__url + 'getUpdates').content)
+        except socket.gaierror:
+            print(
+                "\n\n\n gaierror! \n\n\n"
+            )
 
-        # print(updates)
+            return
+            # updates = json.loads(requests.get(self.__url + 'getUpdates').content)
+
+        # hotfixing
+        if 'result' not in updates:
+            return
+
         for update in updates['result']:
 
             # Refresh this
