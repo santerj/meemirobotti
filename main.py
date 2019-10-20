@@ -4,16 +4,21 @@ from time import sleep
 
 from Bot import Bot
 
-from requests.exceptions import ConnectionError
-
+import logging
 
 def main():
+
     tg = Bot()
+    logging.basicConfig(filename='app.log')
 
     while True:
-        tg.get_updates()
-        sleep(1.5)
-        # except ConnectionError:
+        try:
+            tg.get_updates()
+        except:
+            logging.exception("nurin meni", exc_info=True)
+            pass
+        finally:
+            sleep(1.5)
 
 
 if __name__ == "__main__":

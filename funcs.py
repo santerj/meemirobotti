@@ -251,3 +251,17 @@ def find_choice(msg, array):
         if thing in msg:
             return thing
     return False
+
+
+def uwu(msg):
+    words = msg.split(' ')
+    arr = []
+
+    postfix = choice( ("uwu", "o_0", "ﾟ✧ ^w^✧ ﾟ", "(´◠ω◠`)", "ฅ^•ﻌ•^ฅ") )
+
+    for word in words:
+        word = word.replace('l', 'w').replace('r', 'w')
+        word = word.replace('L', 'W').replace('R', 'W')
+        arr.append(word)
+
+    return ' '.join(arr) + " " + postfix

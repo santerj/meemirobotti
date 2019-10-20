@@ -118,6 +118,9 @@ class Bot:
         elif '/ping' in msg:
             self.send_ping(update)
 
+        elif '/uwu' in msg:
+            self.send_cancer(update)
+
     #                                  method bodies defined below.
 
     def send_meme(self, update):
@@ -198,4 +201,9 @@ class Bot:
     def send_ping(self, update):
 
         message = 'pong'
+        self.send_message(update, message)
+
+    def send_cancer(self, update):
+
+        message = funcs.uwu(update['message']['reply_to_message']['text'])
         self.send_message(update, message)
