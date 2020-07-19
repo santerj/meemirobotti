@@ -4,7 +4,7 @@ from time import time
 
 import requests
 
-import forecast
+# import forecast
 # import camera
 import config
 import funcs
@@ -15,7 +15,6 @@ TOKEN = config.token
 CLIENT_ID = config.client_id
 SECRET = config.secret
 USER_AGENT = config.user_agent
-ADMIN_ID = config.admin_id
 
 
 class Bot:
