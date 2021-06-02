@@ -47,6 +47,7 @@ class Redditor:
         limit = 75
         allow_pre = ("imgur", "i.imgur", "i.redd")
         allow_post = ('.jpg', 'jpeg', '.png', '.gif')
+        fault_meme = Meme("kokeile myöhemmin uudestaan", "https://imgur.com/a/MLzITmE", "Koodissa vikaa")
 
         if legacy:
             # older logic, get post from a randomized sub
@@ -68,6 +69,7 @@ class Redditor:
         
         if posts == []:  # something freaky happening, fallback to default meme
             meme = Meme("kokeile myöhemmin uudestaan", "https://imgur.com/a/MLzITmE", "Koodissa vikaa")
+            return fault_meme
         
         random.shuffle(posts)
 
@@ -76,3 +78,5 @@ class Redditor:
             if post.url[loc:].startswith(allow_pre) and post.url.endswith(allow_post):
                 meme = Meme(post.title, post.url, post.subreddit)
                 return meme
+
+        return fault_meme
