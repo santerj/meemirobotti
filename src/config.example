@@ -1,0 +1,11 @@
+[reddit]
+client_id = changeme
+secret = changeme
+user_agent = changeme
+subreddit_list = reddits
+
+[telegram]
+bot_token = changeme
+
+[openweathermap]
+key = changeme
