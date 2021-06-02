@@ -67,10 +67,6 @@ class Redditor:
             posts = self.reddit.subreddit(self.multireddit).hot(limit=limit)
             posts = [post for post in posts]  # from ListingGenerator to list
         
-        if posts == []:  # something freaky happening, fallback to default meme
-            meme = Meme("kokeile myöhemmin uudestaan", "https://imgur.com/a/MLzITmE", "Koodissa vikaa")
-            return fault_meme
-        
         random.shuffle(posts)
 
         for post in posts:
@@ -79,4 +75,4 @@ class Redditor:
                 meme = Meme(post.title, post.url, post.subreddit)
                 return meme
 
-        return fault_meme
+        return fault_meme  # in case list is empty or nothing matches allowlists
