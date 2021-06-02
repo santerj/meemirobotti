@@ -53,17 +53,18 @@ class Redditor:
             sub = self.reddit.subreddit(
                 random.choice(self.subreddits)
             )
-            posts = sub.top(time_filter='day', limit=50)
+            posts = sub.top(time_filter='day', limit=limit)
+            posts = [post for post in posts]
             if len(posts) < 5:
                 # sub is not super active, get top posts of week instead to
                 # avoid very low quality posts
-                posts = sub.top(time_filter='week', limit=50)
+                posts = sub.top(time_filter='week', limit=limit)
+                posts = [post for post in posts]
 
         else:  # new logic, get post from big multireddit, should be
                # more fault tolerant
             posts = self.reddit.subreddit(self.multireddit).hot(limit=limit)
-        
-        posts = [post for post in posts]  # from ListingGenerator to list
+            posts = [post for post in posts]  # from ListingGenerator to list
         
         if posts == []:  # something freaky happening, fallback to default meme
             meme = Meme("kokeile myöhemmin uudestaan", "https://imgur.com/a/MLzITmE", "Koodissa vikaa")
