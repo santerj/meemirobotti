@@ -1,5 +1,4 @@
 import praw
-import prawcore
 import random
 import configparser
 import typing
@@ -72,7 +71,7 @@ class Redditor:
         for post in posts:
             loc = len("https://")
             if post.url[loc:].startswith(allow_pre) and post.url.endswith(allow_post):
-                meme = Meme(post.title, post.url, post.subreddit)
+                meme = Meme(post.subreddit, post.title, post.url)
                 return meme
 
         return fault_meme  # in case list is empty or nothing matches allowlists
