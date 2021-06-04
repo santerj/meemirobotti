@@ -17,7 +17,7 @@ class Bot:
         self.token = config['telegram']['bot_token']
         self.redditor = Redditor()
         self.meme_cache = []
-        self.meme_cache_len = 25
+        self.meme_cache_len = 35
 
         updater = Updater(token=self.token, use_context=True)
         dispatcher = updater.dispatcher
@@ -30,17 +30,15 @@ class Bot:
             dispatcher.add_handler(PrefixHandler(['/'], cmd, callback))
             dispatcher.add_handler(CommandHandler(cmd, callback))
 
-        dispatcher.job_queue.run_repeating(callback=self.refresh_cache, interval=10, first=1)
+        dispatcher.job_queue.run_repeating(callback=self.refresh_cache, interval=20, first=1)
         updater.start_polling()
         updater.idle()
  
     def refresh_cache(self, update: Update) -> None:
-        if len(self.meme_cache) < self.meme_cache_len:
-            memes = self.redditor.get_memes(
-                amount=self.meme_cache_len - len(self.meme_cache),
-                legacy=False
-            )
-            self.meme_cache = self.meme_cache + memes
+        memes = self.redditor.get_memes(
+            amount=self.meme_cache_len
+        )
+        self.meme_cache = memes
 
     def send_meme(self, update: Update, context: CallbackContext) -> None:
         if len(self.meme_cache) > 0:
