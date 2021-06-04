@@ -17,39 +17,38 @@ class Bot:
         self.token = config['telegram']['bot_token']
         self.redditor = Redditor()
         self.meme_cache = []
+        self.meme_cache_len = 25
 
         updater = Updater(token=self.token, use_context=True)
         dispatcher = updater.dispatcher
 
         self.commands = {
-            "meme": self.send_meme
+            "meemi": self.send_meme
         }
 
         for cmd, callback in self.commands.items():
             dispatcher.add_handler(PrefixHandler(['/'], cmd, callback))
             dispatcher.add_handler(CommandHandler(cmd, callback))
 
-        dispatcher.job_queue.run_repeating(callback=self.refresh_cache, interval=4, first=5)
+        dispatcher.job_queue.run_repeating(callback=self.refresh_cache, interval=10, first=1)
         updater.start_polling()
         updater.idle()
  
     def refresh_cache(self, update: Update) -> None:
-        print("refresh_cache")
-        if len(self.meme_cache) < 20:
-            start = time.time()
-            meme = self.redditor.get_meme(legacy=True)
-            self.meme_cache.append(meme)
-            end = time.time()
-            print(f"refreshed in: {end-start}")
+        if len(self.meme_cache) < self.meme_cache_len:
+            memes = self.redditor.get_memes(
+                amount=self.meme_cache_len - len(self.meme_cache),
+                legacy=False
+            )
+            self.meme_cache = self.meme_cache + memes
 
     def send_meme(self, update: Update, context: CallbackContext) -> None:
-
         if len(self.meme_cache) > 0:
-            print("cache hit!", len(self.meme_cache))
+            # cache hit
             meme = self.meme_cache[0]
-            self.meme_cache = self.meme_cache[1:]
+            self.meme_cache.pop(0)
         else:
-            print("worst case scenario")
+            # cache empty, worst case scenario
             meme = self.redditor.get_meme()
 
         context.bot.send_message(chat_id=update.message.chat_id, text=
