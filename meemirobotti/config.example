@@ -2,7 +2,7 @@
 client_id = changeme
 secret = changeme
 user_agent = changeme
-subreddit_list = reddits
+subreddit_list = lib/reddits
 
 [telegram]
 bot_token = changeme
