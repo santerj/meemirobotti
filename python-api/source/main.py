@@ -15,4 +15,9 @@ async def sendHelp(payload: str) -> str:
 
 @app.get("/uwu", response_class=PlainTextResponse)
 async def uwu(payload: str) -> str:
-    return utils.uwu(payload)
+    return utils.uwuify(payload)
+
+@app.get("/kaannos", response_class=PlainTextResponse)
+async def kaannos(payload: str) -> str:
+    return utils.misspell(payload)
+    

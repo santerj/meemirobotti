@@ -1,5 +1,8 @@
+import virtualkb
+
 import random
 import re
+
 
 def help(text: str) -> str:
     choiceDelimiter = " vai "
@@ -17,7 +20,8 @@ def help(text: str) -> str:
     elif text[-1] == "?":
         return random.choice(("Joo", "Ei"))
 
-def uwu(text: str) -> str:
+
+def uwuify(text: str) -> str:
     # parse kaomoji thingies
     kaomojiFile = "uwus.txt"
     with open(kaomojiFile, "r") as f:
@@ -29,7 +33,7 @@ def uwu(text: str) -> str:
     if len(text) == 0:
         return random.choice(kaomojis)
     
-    # replace letters
+    # replace symbols
     text = re.sub('R', 'W', text)
     text = re.sub('L', 'W', text)
     text = re.sub('r', 'w', text)
@@ -50,3 +54,29 @@ def uwu(text: str) -> str:
     
     return " ".join(parts)
 
+
+def misspell(text: str) -> str:
+    
+    if len(text) == 0:
+        return "/kaannos: Vastaa johonkin viestiin komennolla /kaannos"
+    elif len(text) < 50:
+        chance = 25
+    else:
+        chance = 10
+
+    nearKeys = virtualkb.neigboring_keys(virtualkb.keyboard_upper)
+    nearKeys.update(virtualkb.neigboring_keys(virtualkb.keyboard_lower))
+    knownChars = nearKeys.keys()
+    
+    newText = ""  # str is immutable so build new str as we go
+    for symbol in text:
+        if symbol not in knownChars:
+            newText += symbol
+            continue
+        if random.randint(0, chance) == 0:
+            # simulate typo on QWERTY keeb
+            newText += random.choice(nearKeys[symbol])
+        else:
+            newText += symbol
+
+    return newText
