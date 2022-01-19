@@ -70,8 +70,8 @@ def misspell(text: str, multiplier: int = 1) -> str:
     else:
         chance = 10 // multiplier
 
-    nearKeys = virtualkb.neigboring_keys(virtualkb.keyboard_upper)
-    nearKeys.update(virtualkb.neigboring_keys(virtualkb.keyboard_lower))
+    nearKeys = virtualkb.neigboringKeys(virtualkb.keyboardUpper)
+    nearKeys.update(virtualkb.neigboringKeys(virtualkb.keyboardLower))
     knownChars = nearKeys.keys()
     
     newText = ""  # str is immutable so build new str as we go
