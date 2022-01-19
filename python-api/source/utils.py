@@ -55,14 +55,20 @@ def uwuify(text: str) -> str:
     return " ".join(parts)
 
 
-def misspell(text: str) -> str:
-    
+def misspell(text: str, multiplier: int = 1) -> str:
+    """
+    Return text but with typos
+    TODO: rework multiplier
+    """
+    if multiplier <= 0:  # avoid death by mathematics
+        multiplier = 1
+
     if len(text) == 0:
         return "/kaannos: Vastaa johonkin viestiin komennolla /kaannos"
     elif len(text) < 50:
-        chance = 25
+        chance = 25 // multiplier
     else:
-        chance = 10
+        chance = 10 // multiplier
 
     nearKeys = virtualkb.neigboring_keys(virtualkb.keyboard_upper)
     nearKeys.update(virtualkb.neigboring_keys(virtualkb.keyboard_lower))
