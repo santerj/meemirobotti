@@ -1,57 +1,85 @@
 import json
-
+import re
 import typing
+
 import requests
 
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
 from telegram import TelegramError, Update, Message, MessageEntity
 
 
-def botCommand2ApiCall(message: Message) -> str:
+def botCommand2ApiCall(message: Message) -> requests.Response:
     """
     Translation layer that turns TG bot commands to
-    HTTP GET requests
-    TODO: migrate to json payload by default
+    HTTP requests
     """
     backendHost = "http://python-api:80"
 
     for entity in message.entities:
         if entity.type == MessageEntity.BOT_COMMAND:
             command = message.parse_entity(entity)
-
-    method = command[1:]  # remove leading slash /
-    method = method.split("@", 1)[0]  # remove possible bot slug
-
-    if message.reply_to_message:
-        # message is reply, try to get payload
-        if message.reply_to_message.text:
-            content = message.reply_to_message.text
-            modifier = message.text[len(command)+1:]
-        elif message.reply_to_message.caption:
-            content = message.reply_to_message.caption
-            modifier = message.text[len(command)+1:]
-        else:
-            content = ""
-            modifier = ""
     
-    elif message.text:
-        # regular message
-        content = message.text[len(command)+1:]  # remove command + space
-        modifier = ""
+    # regex out trailing bot slugs (/command@bot_name)
+    m = re.match(pattern="^/[^@]*", string=command)
+    method = m.group(0)
 
-    if modifier != "":
-        call = f"{backendHost}/{method}?content={content}&modifier={modifier}"
-    else:
-        call = f"{backendHost}/{method}?content={content}"
-    return call
+    match method:
+        
+        case "/help":
+            text = message.text[len(command)+1:]
+            call = f"{backendHost}{method}?text={text}"
+            return requests.get(call)
+
+        case "/kaannos":
+            if not message.reply_to_message:
+                text = ""
+            else:
+                if message.reply_to_message.text:
+                    text = message.reply_to_message.text
+                    option = message.text[len(command)+1:]
+                elif message.reply_to_message.caption:
+                    text = message.reply_to_message.caption
+                    option = message.text[len(command)+1:]
+                else:  # reply to a photo without caption
+                    text = ""
+
+            try:
+                option = int(option)
+                optionalArgument = f"&level={option}"
+            except ValueError:
+                text = ""
+                optionalArgument = ""
+            except UnboundLocalError:
+                optionalArgument = ""
+
+            call = f"{backendHost}{method}?text={text}{optionalArgument}"
+            return requests.get(call)
+
+        case "/uwu":
+            if not message.reply_to_message:
+                text = ""
+            else:
+                if message.reply_to_message.text:
+                    text = message.reply_to_message.text
+                elif message.reply_to_message.caption:
+                    text = message.reply_to_message.caption
+                else:  # reply to a photo without caption
+                    text = ""
+
+            call = f"{backendHost}{method}?text={text}"
+            return requests.get(call)
+        
+        case _:
+            call = f"{backendHost}{method}"
+            return requests.get(call)
 
 def commandProcessor(update: Update, context: CallbackContext):
-    call = botCommand2ApiCall(update.message)
-    r = requests.get(call)
-    if r.status_code != 200:
-        sendError(update=update, context=context, errorCode=r.status_code)
+    req = botCommand2ApiCall(update.message)
+
+    if req.status_code != 200:
+        sendError(update=update, context=context, errorCode=req.status_code)
     else:
-        resp = r.text
+        resp = req.text
         context.bot.send_message(chat_id=update.message.chat_id, text=resp)
 
 def sendError(update: Update, context: CallbackContext, errorCode: int = 500):
@@ -72,7 +100,7 @@ def main() -> None:
     dispatcher = updater.dispatcher
     handler = MessageHandler(filters=Filters.command & Filters.text | Filters.reply, callback=commandProcessor)  # filter out media etc
     dispatcher.add_handler(handler)
-    dispatcher.add_error_handler(sendError)
+    #dispatcher.add_error_handler(sendError)
     
     # start bot
     updater.start_polling()

@@ -14,11 +14,14 @@ def help(text: str) -> str:
     # string has choice delimiter
     elif text.find(choiceDelimiter) != -1:
         parts = text.split(choiceDelimiter)
-        return random.choice(parts)    
+        return random.choice(parts)
 
     # question mark terminator
     elif text[-1] == "?":
         return random.choice(("Joo", "Ei"))
+
+    else:
+        return "En tiedä"
 
 
 def uwuify(text: str) -> str:
@@ -57,14 +60,15 @@ def uwuify(text: str) -> str:
 
 def misspell(text: str, multiplier: int = 1) -> str:
     """
-    Return text but with typos
-    TODO: rework multiplier
+    return original text with typos
+    (like an intoxicated person would make...)
+    # TODO: scaling etc
     """
     if multiplier <= 0:  # avoid death by mathematics
         multiplier = 1
 
     if len(text) == 0:
-        return "/kaannos: Vastaa johonkin viestiin komennolla /kaannos"
+        return "/kaannos: Vastaa johonkin viestiin komennolla /kaannos. Halutessasi syötä kännin taso väliltä 1-10 (esim /kaannos 5)."
     elif len(text) < 50:
         chance = 25 // multiplier
     else:

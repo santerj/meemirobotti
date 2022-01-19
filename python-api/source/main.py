@@ -1,3 +1,5 @@
+from lib2to3.pgen2.token import OP
+from typing import Optional
 import utils
 
 from fastapi import FastAPI
@@ -10,13 +12,20 @@ async def healthCheck() -> str:
     return "ok"
 
 @app.get("/help", response_class=PlainTextResponse)
-async def sendHelp(content: str) -> str:
-    return utils.help(content)
+async def help(text: str) -> str:
+    return utils.help(text)
 
 @app.get("/uwu", response_class=PlainTextResponse)
-async def uwu(content: str) -> str:
-    return utils.uwuify(content)
+async def uwu(text: Optional[str] = "") -> str:
+    return utils.uwuify(text)
 
 @app.get("/kaannos", response_class=PlainTextResponse)
-async def kaannos(content: str, modifier: int = 1) -> str:
-    return utils.misspell(content, modifier)
+async def kaannos(text: str, level: Optional[int] = 1) -> str:
+    if not 1 <= level <= 10:
+        return "Syötä kännin taso väliltä 1-10"
+    else:
+        return utils.misspell(text, level)
+
+#@app.get("/meme", response_class=PlainTextResponse)
+#async def getMeme() -> str:
+#    pass
