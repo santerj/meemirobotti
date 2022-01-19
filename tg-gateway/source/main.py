@@ -1,4 +1,5 @@
 import json
+
 import typing
 import requests
 
@@ -11,28 +12,30 @@ def botCommand2ApiCall(message: Message) -> str:
     Translation layer that turns TG bot commands to
     HTTP GET requests
     TODO: migrate to json payload by default
-    TODO: reply to image crashes
     """
     backendHost = "http://python-api:80"
 
-    if message.entities:
-        for entity in message.entities:
-            if entity.type == MessageEntity.BOT_COMMAND:
-                command = message.parse_entity(entity)
-    else:
-        return
+    for entity in message.entities:
+        if entity.type == MessageEntity.BOT_COMMAND:
+            command = message.parse_entity(entity)
 
     method = command[1:]  # remove leading slash /
     method = method.split("@", 1)[0]  # remove possible bot slug
 
     if message.reply_to_message:
+        # message is reply, try to get payload
         if message.reply_to_message.text:
             content = message.reply_to_message.text
             modifier = message.text[len(command)+1:]
         elif message.reply_to_message.caption:
             content = message.reply_to_message.caption
             modifier = message.text[len(command)+1:]
+        else:
+            content = ""
+            modifier = ""
+    
     elif message.text:
+        # regular message
         content = message.text[len(command)+1:]  # remove command + space
         modifier = ""
 
