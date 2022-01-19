@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+
+  tg-gateway:
+    build: tg-gateway/
+    restart: on-failure
+    environment:
+      TELEGRAM_TOKEN: changeme
+      PYTHON_API_HOST: python-api
+      PYTHON_API_PORT: 80
+    depends_on:
+      - python-api
+
+  python-api:
+    build: python-api/
+    restart: on-failure
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: changeme
+    depends_on:
+      - redditor
+
+  redditor:
+    build: redditor/
+    restart: on-failure
+    environment:
+      REDDIT_CLIENT_ID: changeme
+      REDDIT_SECRET: changeme
+      REDDIT_USER_AGENT: changeme
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: changeme
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    restart: always
+    command: redis-server --save 60 1 --loglevel warning --requirepass changeme
+    volumes:
+      - cache:/data
+
+volumes:
+  cache:
+    driver: local
