@@ -11,6 +11,7 @@ def botCommand2ApiCall(message: Message) -> str:
     Translation layer that turns TG bot commands to
     HTTP GET requests
     TODO: migrate to json payload by default
+    TODO: reply to image crashes
     """
     backendHost = "http://python-api:80"
 
@@ -45,10 +46,21 @@ def commandProcessor(update: Update, context: CallbackContext):
     call = botCommand2ApiCall(update.message)
     r = requests.get(call)
     if r.status_code != 200:
-        resp = "Täh!"
+        sendError(update=update, context=context, errorCode=r.status_code)
     else:
         resp = r.text
-    context.bot.send_message(chat_id=update.message.chat_id, text=resp)
+        context.bot.send_message(chat_id=update.message.chat_id, text=resp)
+
+def sendError(update: Update, context: CallbackContext, errorCode: int = 500):
+    errorImageLinks = {
+        404: "https://imgur.com/TkThb0y",
+        500: "https://imgur.com/lozVeMH"
+    }
+    if errorCode not in errorImageLinks.keys():
+        link = "https://imgur.com/6Y8hibu"  # generic error
+    else:
+        link = errorImageLinks[errorCode]
+    context.bot.send_photo(chat_id=update.message.chat_id, photo=link)
 
 def main() -> None:
     token = ""  # replace with env var
@@ -57,6 +69,7 @@ def main() -> None:
     dispatcher = updater.dispatcher
     handler = MessageHandler(filters=Filters.command & Filters.text | Filters.reply, callback=commandProcessor)  # filter out media etc
     dispatcher.add_handler(handler)
+    dispatcher.add_error_handler(sendError)
     
     # start bot
     updater.start_polling()
