@@ -21,16 +21,23 @@ def botCommand2ApiCall(message: Message) -> str:
         return
 
     method = command[1:]  # remove leading slash /
-    
+    method = method.split("@", 1)[0]  # remove possible bot slug
+
     if message.reply_to_message:
         if message.reply_to_message.text:
-            payload = message.reply_to_message.text
+            content = message.reply_to_message.text
+            modifier = message.text[len(command)+1:]
         elif message.reply_to_message.caption:
-            payload = message.reply_to_message.caption
+            content = message.reply_to_message.caption
+            modifier = message.text[len(command)+1:]
     elif message.text:
-        payload = message.text[len(command)+1:]  # remove command + space
-    
-    call = f"{backendHost}/{method}?payload={payload}"
+        content = message.text[len(command)+1:]  # remove command + space
+        modifier = ""
+
+    if modifier != "":
+        call = f"{backendHost}/{method}?content={content}&modifier={modifier}"
+    else:
+        call = f"{backendHost}/{method}?content={content}"
     return call
 
 def commandProcessor(update: Update, context: CallbackContext):
