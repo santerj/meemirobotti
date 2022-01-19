@@ -10,6 +10,7 @@ def botCommand2ApiCall(message: Message) -> str:
     """
     Translation layer that turns TG bot commands to
     HTTP GET requests
+    TODO: migrate to json payload by default
     """
     backendHost = "http://python-api:80"
 
@@ -43,11 +44,14 @@ def botCommand2ApiCall(message: Message) -> str:
 def commandProcessor(update: Update, context: CallbackContext):
     call = botCommand2ApiCall(update.message)
     r = requests.get(call)
-    resp = r.text
+    if r.status_code != 200:
+        resp = "Täh!"
+    else:
+        resp = r.text
     context.bot.send_message(chat_id=update.message.chat_id, text=resp)
 
 def main() -> None:
-    token = "changeme"  # replace with env var
+    token = ""  # replace with env var
     updater = Updater(token=token, use_context=True)
 
     dispatcher = updater.dispatcher
