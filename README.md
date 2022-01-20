@@ -1,9 +1,9 @@
 # meemirobotti
 
-This is my first ever programming project. It is a not very serious Telegram bot for me and my friends. I started working on it in 2018 with no programming knowledge and it has sort of evolved over time along with my skills (not to mean it is well-written even today). In 2022 almost the entire app was ~~overengineered~~ rewritten into a microservices/modular architecture.
+This is my first ever programming project. It is a not very serious Telegram bot for me and my friends. I started working on it in 2018 with no programming knowledge and it has sort of evolved over time along with my skills (not to mean it is a quality product even today). In Jan 2022 almost the entire app was ~~overengineered~~ rewritten into a microservices/modular architecture.
 
 # how to
-1. make sure that you have a way to build and run OCI compliant containers. I us `docker` and `docker-compose`.
+1. make sure that you have a way to build and run OCI compliant containers. I use `docker` and `docker-compose`.
 2. make sure that you have API credentials to Telegram (message @botfather), Reddit and openweathermap
 3. clone this repository
 4. rename the examples file (`$ mv docker-compose.yml.example docker-compose.yml`) and edit your credentials into the environment variables sections.
