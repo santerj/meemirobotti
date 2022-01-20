@@ -1,6 +1,7 @@
-import json
 import re
 import typing
+
+from os import getenv
 
 import requests
 
@@ -94,7 +95,7 @@ def sendError(update: Update, context: CallbackContext, errorCode: int = 500):
     context.bot.send_photo(chat_id=update.message.chat_id, photo=link)
 
 def main() -> None:
-    token = ""  # replace with env var
+    token = getenv("TELEGRAM_TOKEN")
     updater = Updater(token=token, use_context=True)
 
     dispatcher = updater.dispatcher
