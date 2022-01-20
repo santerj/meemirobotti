@@ -1,6 +1,6 @@
 # meemirobotti
 
-This is my first ever programming project. It is a not very serious Telegram bot for me and my friends. I started working on it in 2018 with no programming knowledge and it has sort of evolved over time along with my skills (not to mean it is well-written even today). In 2022 almost the entire app was -overengineered- rewritten into a microservices/modular architecture.
+This is my first ever programming project. It is a not very serious Telegram bot for me and my friends. I started working on it in 2018 with no programming knowledge and it has sort of evolved over time along with my skills (not to mean it is well-written even today). In 2022 almost the entire app was ~~overengineered~~ rewritten into a microservices/modular architecture.
 
 # how to
 1. make sure that you have a way to build and run OCI compliant containers. I us `docker` and `docker-compose`.
