@@ -20,6 +20,7 @@ There are microservices.
 
 # todo
 - Include caddy2 as webhook server/tls terminator/reverse proxy
+- Figure out a way to refesh reddits.txt without rebuilding the entire container
 
 # other
 Don't take this repository too seriously.
