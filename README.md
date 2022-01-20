@@ -13,7 +13,7 @@ This is my first ever programming project. It is a not very serious Telegram bot
 # tech
 There are microservices.
 
-- `tg-gateway`: handles HTTP traffic to and from Telegram servers. It is a translation layer to convert bot commands to internal API calls. Theoretically it can be replicated to upscale traffic troughut (but not practically). It is built with [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot).
+- `tg-gateway`: handles HTTP traffic to and from Telegram servers. It is a translation layer to convert bot commands to internal API calls. Theoretically it can be replicated to upscale traffic troughput (not practically). It is built with [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot).
 - `python-api`: Endpoint for API calls made by `tg-gatewy` (and theoretically, gateway from any service like discord) – it is completely decoupled from Telegram bot command model. Built with [FastAPI](https://github.com/tiangolo/fastapi)
 - `redditor`: Seeks memes from reddit and puts them into a message queue. Built with [praw](https://github.com/praw-dev/praw)
 - `redis`: Used to decouple `python-api` and `redditor`. Contains a queue that is fed by `redditor` and consumed by `python-api`.
