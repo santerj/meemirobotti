@@ -89,7 +89,7 @@ def sendError(update: Update, context: CallbackContext, errorCode: int = 500):
         500: "https://imgur.com/lozVeMH"
     }
     if errorCode not in errorImageLinks.keys():
-        link = "https://imgur.com/6Y8hibu"  # generic error
+        link = errorImageLinks[500]
     else:
         link = errorImageLinks[errorCode]
     context.bot.send_photo(chat_id=update.message.chat_id, photo=link)
