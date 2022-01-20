@@ -3,6 +3,10 @@ import virtualkb
 import random
 import re
 
+from os import getenv
+
+import redis
+
 
 def help(text: str) -> str:
     choiceDelimiter = " vai "
@@ -90,3 +94,18 @@ def misspell(text: str, multiplier: int = 1) -> str:
             newText += symbol
 
     return newText
+
+
+def getMeme() -> str:
+    """
+    Consume a meme from Redis queue
+    """
+    redisKey = "queue:memes"
+    r = redis.Redis(
+        host=getenv("REDIS_HOST"),
+        port=getenv("REDIS_PORT"),
+        db=0,
+        password=getenv("REDIS_PASSWORD"),
+        decode_responses=True,
+    )
+    return r.lpop(name=redisKey)

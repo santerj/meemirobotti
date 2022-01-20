@@ -4,6 +4,8 @@ import utils
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
 
+
+
 app = FastAPI()
 
 @app.get("/start", response_class=PlainTextResponse)
@@ -25,6 +27,6 @@ async def kaannos(text: str, level: Optional[int] = 1) -> str:
     else:
         return utils.misspell(text, level)
 
-#@app.get("/meme", response_class=PlainTextResponse)
-#async def getMeme() -> str:
-#    pass
+@app.get("/meme", response_class=PlainTextResponse)
+async def getMeme() -> str:
+    return utils.getMeme()
