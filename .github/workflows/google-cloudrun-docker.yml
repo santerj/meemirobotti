@@ -51,8 +51,8 @@ on:
 env:
   PROJECT_ID: 'meemirobotti-397616'
   GAR_LOCATION: 'europe-north1'
-  SERVICE: YOUR_SERVICE_NAME # TODO: update Cloud Run service name
-  REGION: YOUR_SERVICE_REGION # TODO: update Cloud Run service region
+  SERVICE: 'meemirobotti-poller'
+  REGION: 'europe-north1'
 
 jobs:
   deploy:
