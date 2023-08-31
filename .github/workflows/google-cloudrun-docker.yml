@@ -51,6 +51,7 @@ on:
 env:
   PROJECT_ID: 'meemirobotti-397616'
   GAR_LOCATION: 'europe-north1'
+  REGISTRY: 'meemirobotti-registry'
   SERVICE: 'meemirobotti-poller'
   REGION: 'europe-north1'
 
@@ -94,8 +95,8 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}" ./
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
+          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY }}:${{ github.sha }}" ./
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REGISTRY }}:${{ github.sha }}"
 
       # END - Docker auth and build
 
