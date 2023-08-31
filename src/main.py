@@ -27,7 +27,7 @@ async def commandProcessor(update: Update, context: CallbackContext):
     # ---- BOT MESSAGES -> FUNCTION CALLS GO HERE ---- #
     match command:
         case "/help":
-            response = commands.help(text)
+            response = await commands.help(text)
         case _:
             # command not known
             pass

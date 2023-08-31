@@ -1,6 +1,6 @@
 import random
 
-def help(text: str) -> str:
+async def help(text: str) -> str:
     choiceDelimiter = " vai "
 
     text = text[len("text")+1:]  # strip command part out
