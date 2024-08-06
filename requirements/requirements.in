@@ -1,5 +1,7 @@
+envtoml
 flask
 loguru
 pydantic
 python-dotenv
 requests
+uwuipy

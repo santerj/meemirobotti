@@ -1,20 +1,34 @@
 # meemirobotti
 
-Generic template for new Python projects _with no dependencies!_.
-
-## Which batteries are included
-
-- basic project structure (source code, dependencies, tests) with minimal boilerplate
-- nox sessions for testing, linting, auditing etc.
-- TODO: tool configs in pyproject.toml
-- TODO: basic Dockerfile
-- TODO: Taskfile for recurring tasks (pip-compile etc.)
-
 # Getting started
 
 ## Prerequisites
 
-This project requires `Python 3.11+`.
+This project requires `Python 3.12`.
+
+For local testing, you can use [ngrok](https://ngrok.com/)
+
+1. Start ngrok
+
+    `ngrok http http://localhost:5000`
+
+2. Set webhook URL for Telegram
+
+    ```
+    export TG_TOKEN=yourtoken
+    export NGROK_URL=yoururl
+
+    curl "https://api.telegram.org/bot$TG_TOKEN/setWebhook?url=$NGROK_URL"
+    ```
+
+3. Start flask dev server
+
+    `cd meemirobotti`
+    `FLASK_APP=main flask run`
+
+    Or if using gotask:
+
+    `task run`
 
 ## Installation
 
