@@ -1,0 +1,3 @@
+[telegram]
+token = "$TG_TOKEN"
+stale_message_age = 15

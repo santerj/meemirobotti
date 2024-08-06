@@ -1,31 +1,53 @@
 # meemirobotti
-_since 2018!_
 
-## Quickstart
+# Getting started
 
-Easiest way to run is with [Docker](https://www.docker.com/) (or [podman](https://podman.io/)).
+## Prerequisites
 
-First, make your very own environment variable file:
+This project requires `Python 3.12`.
 
-    cp .env.example .env
+For local testing, you can use [ngrok](https://ngrok.com/)
 
-Next, obtain any necessary API tokens or relevant nonsense and fill any placeholders in the file.
+1. Start ngrok
 
-    $EDITOR .env
+    `ngrok http http://localhost:5000`
 
-Now you can run your own local instance of the meemirobotti by entering this in your terminal.
+2. Set webhook URL for Telegram
 
-    docker run --env-file=".env" --rm $(docker build -q .)
+    ```
+    export TG_TOKEN=yourtoken
+    export NGROK_URL=yoururl
 
-If something goes wrong with the build, examine logs for example by running
+    curl "https://api.telegram.org/bot$TG_TOKEN/setWebhook?url=$NGROK_URL"
+    ```
 
-    docker build .
+3. Start flask dev server
 
-and submitting an issue.
+    `cd meemirobotti`
+    `FLASK_APP=main flask run`
 
-If for some reason you will not use docker, the following should get you started:
+    Or if using gotask:
 
-    # make sure your python interpreter is at least at version 3.10
-    python -m venv venv && venv/bin/python install -r requirements.txt
-    venv/bin/python main.py
+    `task run`
 
+## Installation
+
+Clone this repository.
+
+    git clone https://github.com/santerj/python-project-template.git [my-project]
+
+## Usage
+
+Run the interactive installer.
+
+    python ./setup.py
+
+After installation, there is some boilerplate code in `meemirootti/main.py` and `tests/test_main.py`.
+
+Tasks for unit testing, linting, security auditing etc. are included in the `noxfile.py`. Try to invoke it with
+
+    nox
+
+If you don't have nox installed globally, just use the one included in the virtual environment:
+
+    dev-venv/bin/nox
