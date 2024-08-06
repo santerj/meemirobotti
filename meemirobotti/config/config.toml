@@ -6,3 +6,4 @@ stale_message_age = 15
 client_id = "$REDDIT_CLIENT_ID"
 secret = "$REDDIT_SECRET"
 user_agent = "$REDDIT_USER_AGENT"
+queue_size = 25

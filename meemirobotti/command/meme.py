@@ -22,8 +22,8 @@ class Redditor:
     """
     Virtual redditor who browses reddit and gives us memes
     """
-    def __init__(self, client_id: str, secret: str, user_agent: str) -> None:
-        self.targetQueueLength = 25
+    def __init__(self, client_id: str, secret: str, user_agent: str, queue_size: int = 25) -> None:
+        self.targetQueueLength = queue_size
         self.subreddits = []
         self.parse_subreddits("reddits.txt")
         self.multireddit = "+".join(self.subreddits)
@@ -100,7 +100,7 @@ class Redditor:
             memes = self._get_memes(amount=queueLengthDiff)
             self._push_to_queue(memes=memes)
             toc = time.perf_counter()
-            logger.info(f'DONE | took {toc - tic:0.4f} s')
+            logger.success(f'DONE | took {toc - tic:0.4f} s')
         else:
             logger.info(f'QUEUE FULL | {length=}')
 

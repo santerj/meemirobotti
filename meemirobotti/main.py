@@ -1,4 +1,4 @@
-import sys; sys.path.insert(0, './')
+import sys; sys.path.insert(0, './')  # fix import issues
 
 import time
 
@@ -19,25 +19,26 @@ def create_app():
     redditor = meme.Redditor(
         client_id=c['client_id'],
         secret=c['secret'],
-        user_agent=c['user_agent']
+        user_agent=c['user_agent'],
+        queue_size=c['queue_size']
     )
     app = Flask(__name__, static_folder='static')
     app.config['redditor'] = redditor
-    logger.info('APP INITIALIZED')
+    logger.success('🟢 App started!')
     return app
 
+# setup flask and add reference to redditor object
 app = create_app()
 redditor: meme.Redditor = app.config['redditor']
-
 if __name__ == "__main__":
     # run flask
     app.run()
 
+# setup apscheduler
 scheduler = APScheduler()
 scheduler.api_enabled = True
 scheduler.init_app(app)
 scheduler.start()
-
 @scheduler.task('interval', id='refresh_meme_queue', minutes=5, misfire_grace_time=30)
 def refresh_meme_queue():
     redditor.refresh_queue()
@@ -75,8 +76,10 @@ def send_message(update: telegram.Update, message: str) -> Response:
 
     r = requests.post(url, json=payload, timeout=3)
     if r.status_code == 200:
+        logger.info('Sent response')
         return Response('success', 200)
     else:
+        logger.error('Failed sending response')
         return Response('error', 500)
 
 def send_image() -> Response:
