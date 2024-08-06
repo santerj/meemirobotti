@@ -1,24 +1,53 @@
 import sys; sys.path.insert(0, './')
 
-import envtoml
 import time
 
+import envtoml
 import requests
-
-from model import telegram
-from .command import misc
-
+from command import meme, misc
+from dotenv import load_dotenv
+from flask import Flask, Response, request
+from flask_apscheduler import APScheduler
 from loguru import logger
-from flask import Flask, request, Response
-app = Flask(__name__)
+from model import telegram
+
+load_dotenv()
 conf = envtoml.load(open('config/config.toml'))
+
+def create_app():
+    c = conf['reddit']
+    redditor = meme.Redditor(
+        client_id=c['client_id'],
+        secret=c['secret'],
+        user_agent=c['user_agent']
+    )
+    app = Flask(__name__, static_folder='static')
+    app.config['redditor'] = redditor
+    logger.info('APP INITIALIZED')
+    return app
+
+app = create_app()
+redditor: meme.Redditor = app.config['redditor']
+
+if __name__ == "__main__":
+    # run flask
+    app.run()
+
+scheduler = APScheduler()
+scheduler.api_enabled = True
+scheduler.init_app(app)
+scheduler.start()
+
+@scheduler.task('interval', id='refresh_meme_queue', minutes=5, misfire_grace_time=30)
+def refresh_meme_queue():
+    redditor.refresh_queue()
+
 
 TG_TOKEN = conf['telegram']['token']
 
 
 def parse_command(update: telegram.Update) -> str:
     message = update.edited_message if update.edited_message else update.message
-    print(message)
 
     if message.entities:
         for entity in message.entities:
@@ -33,7 +62,7 @@ def parse_command(update: telegram.Update) -> str:
     else: return ''
 
 def send_message(update: telegram.Update, message: str) -> Response:
-    logger.info(message)
+    logger.debug(message)
     if message in ('', None):
         # return early when content ends up empty
         return Response('success', 200)
@@ -50,12 +79,17 @@ def send_message(update: telegram.Update, message: str) -> Response:
     else:
         return Response('error', 500)
 
+def send_image() -> Response:
+    # TODO...
+    pass
+
 @app.route('/', methods=['POST'])
-def post():
+def bot():
     if request.method == 'POST':
 
         # deserialize payload to Pydantic
         update = telegram.Update(**request.get_json())
+        logger.debug(update.model_dump)
         now = time.time()
         # TODO: discard stale requests
 
@@ -72,6 +106,10 @@ def post():
 
             case '/help':
                 message = misc.help(update)
+                return send_message(update, message)
+            
+            case '/meme':
+                message = redditor.get_meme()
                 return send_message(update, message)
             
             case _:

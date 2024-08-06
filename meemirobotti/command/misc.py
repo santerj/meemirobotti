@@ -1,9 +1,8 @@
 import random
 
-from uwuipy import Uwuipy
 from loguru import logger
-
 from model import telegram
+from uwuipy import Uwuipy
 
 
 def uwu(update: telegram.Update) -> str:
