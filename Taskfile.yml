@@ -9,3 +9,7 @@ tasks:
       - dev-venv/bin/pip-compile requirements/requirements.in -o requirements/requirements.txt
       - dev-venv/bin/pip-compile requirements/dev-requirements.in -o requirements/dev-requirements.txt
       - dev-venv/bin/python -m pip install -r requirements/dev-requirements.txt
+  run:
+    dir: meemirobotti
+    cmds:
+      - FLASK_APP=main flask run --debug --reload

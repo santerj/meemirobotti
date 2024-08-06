@@ -4,6 +4,10 @@
 #
 #    pip-compile --output-file=requirements/dev-requirements.txt requirements/dev-requirements.in
 #
+annotated-types==0.7.0
+    # via
+    #   -r requirements/requirements.txt
+    #   pydantic
 argcomplete==3.4.0
     # via nox
 blinker==1.8.2
@@ -62,6 +66,12 @@ pip-tools==7.4.1
     # via -r requirements/dev-requirements.in
 platformdirs==4.2.2
     # via virtualenv
+pydantic==2.8.2
+    # via -r requirements/requirements.txt
+pydantic-core==2.20.1
+    # via
+    #   -r requirements/requirements.txt
+    #   pydantic
 pyproject-hooks==1.1.0
     # via
     #   build
@@ -70,6 +80,11 @@ python-dotenv==1.0.1
     # via -r requirements/requirements.txt
 requests==2.32.3
     # via -r requirements/requirements.txt
+typing-extensions==4.12.2
+    # via
+    #   -r requirements/requirements.txt
+    #   pydantic
+    #   pydantic-core
 urllib3==2.2.2
     # via
     #   -r requirements/requirements.txt

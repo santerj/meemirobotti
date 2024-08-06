@@ -1,4 +1,5 @@
 flask
 loguru
+pydantic
 python-dotenv
 requests

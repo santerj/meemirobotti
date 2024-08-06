@@ -4,6 +4,8 @@
 #
 #    pip-compile --output-file=requirements/requirements.txt requirements/requirements.in
 #
+annotated-types==0.7.0
+    # via pydantic
 blinker==1.8.2
     # via flask
 certifi==2024.7.4
@@ -26,10 +28,18 @@ markupsafe==2.1.5
     # via
     #   jinja2
     #   werkzeug
+pydantic==2.8.2
+    # via -r requirements/requirements.in
+pydantic-core==2.20.1
+    # via pydantic
 python-dotenv==1.0.1
     # via -r requirements/requirements.in
 requests==2.32.3
     # via -r requirements/requirements.in
+typing-extensions==4.12.2
+    # via
+    #   pydantic
+    #   pydantic-core
 urllib3==2.2.2
     # via requests
 werkzeug==3.0.3
