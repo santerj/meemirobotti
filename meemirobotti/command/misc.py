@@ -1,9 +1,8 @@
 import random
 
-from uwuipy import Uwuipy
 from loguru import logger
-
 from model import telegram
+from uwuipy import Uwuipy
 
 
 def uwu(update: telegram.Update) -> str:
@@ -14,10 +13,12 @@ def uwu(update: telegram.Update) -> str:
         try:
             return random.choice(uwu_._Uwuipy__faces)
         except AttributeError:  # above might break
+            logger.error(f'Failed getting faces from uwuipy')
             return 'UwU'
     
 def help(update: telegram.Update) -> str:
-    logger.info(update)
+    command_name = '/help'
+    logger.debug(update)
     if update.message.reply_to_message:
         text = update.message.reply_to_message.text
     elif update.message.text:
@@ -25,10 +26,12 @@ def help(update: telegram.Update) -> str:
     else:
         text = ''
 
+    text = text.replace(command_name, '')
+
     choiceDelimiter = " vai "
 
     if text == '':
-        helptext = "/help: Valitse usean vaihtoehdon välillä käyttämällä sanaa \"vai\". Jos haluat joo/ei päätöksen, päätä viesti kysymysmerkkiin (?)"
+        helptext = "/help: Valitse vaihtoehtojen välillä käyttämällä sanaa \"vai\". Muissa tapauksissa saat joo/ei vastauksen"
         return helptext
 
     # string has choice delimiter
@@ -36,9 +39,5 @@ def help(update: telegram.Update) -> str:
         parts = text.split(choiceDelimiter)
         return random.choice(parts)
 
-    # question mark terminator
-    elif text[-1] == "?":
-        return random.choice(("Joo", "Ei"))
-
     else:
-        return "En tiedä"
+        return random.choice(("Joo", "Ei"))

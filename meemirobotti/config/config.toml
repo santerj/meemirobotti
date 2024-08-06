@@ -1,3 +1,9 @@
 [telegram]
 token = "$TG_TOKEN"
 stale_message_age = 15
+
+[reddit]
+client_id = "$REDDIT_CLIENT_ID"
+secret = "$REDDIT_SECRET"
+user_agent = "$REDDIT_USER_AGENT"
+queue_size = 25

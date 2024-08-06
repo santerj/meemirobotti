@@ -8,6 +8,10 @@ annotated-types==0.7.0
     # via
     #   -r requirements/requirements.txt
     #   pydantic
+apscheduler==3.10.4
+    # via
+    #   -r requirements/requirements.txt
+    #   flask-apscheduler
 argcomplete==3.4.0
     # via nox
 blinker==1.8.2
@@ -38,6 +42,10 @@ envtoml==0.1.2
 filelock==3.15.4
     # via virtualenv
 flask==3.0.3
+    # via
+    #   -r requirements/requirements.txt
+    #   flask-apscheduler
+flask-apscheduler==1.13.1
     # via -r requirements/requirements.txt
 idna==3.7
     # via
@@ -68,6 +76,12 @@ pip-tools==7.4.1
     # via -r requirements/dev-requirements.in
 platformdirs==4.2.2
     # via virtualenv
+praw==7.7.1
+    # via -r requirements/requirements.txt
+prawcore==2.4.0
+    # via
+    #   -r requirements/requirements.txt
+    #   praw
 pydantic==2.8.2
     # via -r requirements/requirements.txt
 pydantic-core==2.20.1
@@ -78,10 +92,26 @@ pyproject-hooks==1.1.0
     # via
     #   build
     #   pip-tools
+python-dateutil==2.9.0.post0
+    # via
+    #   -r requirements/requirements.txt
+    #   flask-apscheduler
 python-dotenv==1.0.1
     # via -r requirements/requirements.txt
+pytz==2024.1
+    # via
+    #   -r requirements/requirements.txt
+    #   apscheduler
 requests==2.32.3
-    # via -r requirements/requirements.txt
+    # via
+    #   -r requirements/requirements.txt
+    #   prawcore
+    #   update-checker
+six==1.16.0
+    # via
+    #   -r requirements/requirements.txt
+    #   apscheduler
+    #   python-dateutil
 toml==0.10.2
     # via
     #   -r requirements/requirements.txt
@@ -91,6 +121,14 @@ typing-extensions==4.12.2
     #   -r requirements/requirements.txt
     #   pydantic
     #   pydantic-core
+tzlocal==5.2
+    # via
+    #   -r requirements/requirements.txt
+    #   apscheduler
+update-checker==0.18.0
+    # via
+    #   -r requirements/requirements.txt
+    #   praw
 urllib3==2.2.2
     # via
     #   -r requirements/requirements.txt
@@ -99,6 +137,10 @@ uwuipy==0.1.9
     # via -r requirements/requirements.txt
 virtualenv==20.26.3
     # via nox
+websocket-client==1.8.0
+    # via
+    #   -r requirements/requirements.txt
+    #   praw
 werkzeug==3.0.3
     # via
     #   -r requirements/requirements.txt

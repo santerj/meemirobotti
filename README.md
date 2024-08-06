@@ -23,12 +23,21 @@ For local testing, you can use [ngrok](https://ngrok.com/)
 
 3. Start flask dev server
 
-    `cd meemirobotti`
-    `FLASK_APP=main flask run`
+    ```
+    cd meemirobotti
+    FLASK_APP=main flask run
+    ```
 
     Or if using gotask:
 
     `task run`
+
+    Or start something closer to a production server:
+
+    ```
+    cd meemirobotti
+    gunicorn main:app -b 127.0.0.1:5050
+    ```
 
 ## Installation
 

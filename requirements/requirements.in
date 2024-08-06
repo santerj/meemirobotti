@@ -1,6 +1,9 @@
 envtoml
 flask
+flask_apscheduler
+gunicorn
 loguru
+praw
 pydantic
 python-dotenv
 requests
