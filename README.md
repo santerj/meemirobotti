@@ -1,31 +1,39 @@
 # meemirobotti
-_since 2018!_
 
-## Quickstart
+Generic template for new Python projects _with no dependencies!_.
 
-Easiest way to run is with [Docker](https://www.docker.com/) (or [podman](https://podman.io/)).
+## Which batteries are included
 
-First, make your very own environment variable file:
+- basic project structure (source code, dependencies, tests) with minimal boilerplate
+- nox sessions for testing, linting, auditing etc.
+- TODO: tool configs in pyproject.toml
+- TODO: basic Dockerfile
+- TODO: Taskfile for recurring tasks (pip-compile etc.)
 
-    cp .env.example .env
+# Getting started
 
-Next, obtain any necessary API tokens or relevant nonsense and fill any placeholders in the file.
+## Prerequisites
 
-    $EDITOR .env
+This project requires `Python 3.11+`.
 
-Now you can run your own local instance of the meemirobotti by entering this in your terminal.
+## Installation
 
-    docker run --env-file=".env" --rm $(docker build -q .)
+Clone this repository.
 
-If something goes wrong with the build, examine logs for example by running
+    git clone https://github.com/santerj/python-project-template.git [my-project]
 
-    docker build .
+## Usage
 
-and submitting an issue.
+Run the interactive installer.
 
-If for some reason you will not use docker, the following should get you started:
+    python ./setup.py
 
-    # make sure your python interpreter is at least at version 3.10
-    python -m venv venv && venv/bin/python install -r requirements.txt
-    venv/bin/python main.py
+After installation, there is some boilerplate code in `meemirootti/main.py` and `tests/test_main.py`.
 
+Tasks for unit testing, linting, security auditing etc. are included in the `noxfile.py`. Try to invoke it with
+
+    nox
+
+If you don't have nox installed globally, just use the one included in the virtual environment:
+
+    dev-venv/bin/nox
