@@ -1,0 +1,11 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list-all
+  pip-compile:
+    cmds:
+      - dev-venv/bin/pip-compile requirements/requirements.in -o requirements/requirements.txt
+      - dev-venv/bin/pip-compile requirements/dev-requirements.in -o requirements/dev-requirements.txt
+      - dev-venv/bin/python -m pip install -r requirements/dev-requirements.txt
