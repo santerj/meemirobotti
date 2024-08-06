@@ -1,2 +1,4 @@
-python-dotenv
+flask
 loguru
+python-dotenv
+requests
