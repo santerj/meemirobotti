@@ -4,6 +4,7 @@ import time
 
 import envtoml
 import requests
+import sentry_sdk
 from command import meme, misc
 from dotenv import load_dotenv
 from flask import Flask, Response, request
@@ -13,6 +14,12 @@ from model import telegram
 
 load_dotenv()
 conf = envtoml.load(open('config/config.toml'))
+
+sentry_sdk.init(
+    dsn=conf['sentry']['dsn'],
+    traces_sample_rate=1.0,
+    profiles_sample_rate=1.0,
+)
 
 def create_app():
     c = conf['reddit']
@@ -30,6 +37,7 @@ def create_app():
 # setup flask and add reference to redditor object
 app = create_app()
 redditor: meme.Redditor = app.config['redditor']
+
 if __name__ == "__main__":
     # run flask
     app.run()
@@ -86,7 +94,7 @@ def send_image() -> Response:
     # TODO...
     pass
 
-@app.route('/', methods=['POST'])
+@app.route('/bot', methods=['POST'])
 def bot():
     if request.method == 'POST':
 
@@ -118,3 +126,7 @@ def bot():
             case _:
                 # unregistered command
                 return send_message(update, None)
+
+@app.route('/health', methods=['GET'])
+def health():
+    return Response('ok', 200)

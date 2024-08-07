@@ -7,3 +7,7 @@ client_id = "$REDDIT_CLIENT_ID"
 secret = "$REDDIT_SECRET"
 user_agent = "$REDDIT_USER_AGENT"
 queue_size = 25
+
+[sentry]
+dsn = "$SENTRY_DSN"
+env = "$SENTRY_ENV"

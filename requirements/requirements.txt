@@ -11,7 +11,9 @@ apscheduler==3.10.4
 blinker==1.8.2
     # via flask
 certifi==2024.7.4
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
@@ -23,6 +25,8 @@ flask==3.0.3
     #   -r requirements/requirements.in
     #   flask-apscheduler
 flask-apscheduler==1.13.1
+    # via -r requirements/requirements.in
+gunicorn==22.0.0
     # via -r requirements/requirements.in
 idna==3.7
     # via requests
@@ -36,6 +40,8 @@ markupsafe==2.1.5
     # via
     #   jinja2
     #   werkzeug
+packaging==24.1
+    # via gunicorn
 praw==7.7.1
     # via -r requirements/requirements.in
 prawcore==2.4.0
@@ -55,6 +61,8 @@ requests==2.32.3
     #   -r requirements/requirements.in
     #   prawcore
     #   update-checker
+sentry-sdk==2.12.0
+    # via -r requirements/requirements.in
 six==1.16.0
     # via
     #   apscheduler
@@ -70,7 +78,9 @@ tzlocal==5.2
 update-checker==0.18.0
     # via praw
 urllib3==2.2.2
-    # via requests
+    # via
+    #   requests
+    #   sentry-sdk
 uwuipy==0.1.9
     # via -r requirements/requirements.in
 websocket-client==1.8.0

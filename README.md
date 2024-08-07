@@ -18,7 +18,7 @@ For local testing, you can use [ngrok](https://ngrok.com/)
     export TG_TOKEN=yourtoken
     export NGROK_URL=yoururl
 
-    curl "https://api.telegram.org/bot$TG_TOKEN/setWebhook?url=$NGROK_URL"
+    curl "https://api.telegram.org/bot$TG_TOKEN/setWebhook?url=$NGROK_URL/bot"
     ```
 
 3. Start flask dev server

@@ -7,4 +7,5 @@ praw
 pydantic
 python-dotenv
 requests
+sentry-sdk
 uwuipy
