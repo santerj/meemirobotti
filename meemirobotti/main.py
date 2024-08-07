@@ -19,6 +19,7 @@ sentry_sdk.init(
     dsn=conf['sentry']['dsn'],
     traces_sample_rate=1.0,
     profiles_sample_rate=1.0,
+    environment=conf['sentry'].get('env', 'dev')
 )
 
 def create_app():
@@ -44,7 +45,7 @@ if __name__ == "__main__":
 
 # setup apscheduler
 scheduler = APScheduler()
-scheduler.api_enabled = True
+scheduler.api_enabled = False
 scheduler.init_app(app)
 scheduler.start()
 @scheduler.task('interval', id='refresh_meme_queue', minutes=5, misfire_grace_time=30)
