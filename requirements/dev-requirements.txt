@@ -6,32 +6,32 @@
 #
 annotated-types==0.7.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   pydantic
 apscheduler==3.10.4
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   flask-apscheduler
 argcomplete==3.4.0
     # via nox
 blinker==1.8.2
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   flask
 build==1.2.1
     # via pip-tools
 certifi==2024.7.4
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   requests
     #   sentry-sdk
 charset-normalizer==3.3.2
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   requests
 click==8.1.7
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   flask
     #   pip-tools
 colorlog==6.8.2
@@ -39,59 +39,59 @@ colorlog==6.8.2
 distlib==0.3.8
     # via virtualenv
 envtoml==0.1.2
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 filelock==3.15.4
     # via virtualenv
 flask==3.0.3
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   flask-apscheduler
 flask-apscheduler==1.13.1
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 gunicorn==22.0.0
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 idna==3.7
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   requests
 itsdangerous==2.2.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   flask
-jinja2==3.1.4
+jinja2==3.1.5
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   flask
 loguru==0.7.2
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 markupsafe==2.1.5
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   jinja2
     #   werkzeug
 nox==2024.4.15
-    # via -r requirements/dev-requirements.in
+    # via -r dev-requirements.in
 packaging==24.1
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   build
     #   gunicorn
     #   nox
 pip-tools==7.4.1
-    # via -r requirements/dev-requirements.in
+    # via -r dev-requirements.in
 platformdirs==4.2.2
     # via virtualenv
 praw==7.7.1
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 prawcore==2.4.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   praw
 pydantic==2.8.2
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 pydantic-core==2.20.1
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   pydantic
 pyproject-hooks==1.1.0
     # via
@@ -99,59 +99,59 @@ pyproject-hooks==1.1.0
     #   pip-tools
 python-dateutil==2.9.0.post0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   flask-apscheduler
 python-dotenv==1.0.1
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 pytz==2024.1
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   apscheduler
 requests==2.32.3
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   prawcore
     #   update-checker
 sentry-sdk==2.12.0
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 six==1.16.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   apscheduler
     #   python-dateutil
 toml==0.10.2
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   envtoml
 typing-extensions==4.12.2
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   pydantic
     #   pydantic-core
 tzlocal==5.2
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   apscheduler
 update-checker==0.18.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   praw
 urllib3==2.2.2
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   requests
     #   sentry-sdk
 uwuipy==0.1.9
-    # via -r requirements/requirements.txt
+    # via -r requirements.txt
 virtualenv==20.26.3
     # via nox
 websocket-client==1.8.0
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   praw
 werkzeug==3.0.3
     # via
-    #   -r requirements/requirements.txt
+    #   -r requirements.txt
     #   flask
 wheel==0.44.0
     # via pip-tools
