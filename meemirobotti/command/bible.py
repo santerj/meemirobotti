@@ -13,7 +13,7 @@ def tokenize_en(text: str) -> list[str]:
 
 def check_if_biblical(lemmae: list[str], lang: str) -> str:
     # Compare (preferably lemmatized) list of words to the lemmatized bible, return amt of matches
-    with open(f'./scripts/lemmatize/results/lemmatized_{lang}.json', 'r', encoding='utf-8') as f:
+    with open(f'./scripts/lemmatize/results/lemmatized_{lang}.json', 'r', encoding='utf-8') as f:  # TODO: fix path
         biblical_words = set(json.load(f))
 
     matches = [lemma for lemma in lemmae if lemma.lower() in biblical_words]
@@ -34,7 +34,7 @@ def raamattu(update: telegram.Update) -> str:
         text = update.message.reply_to_message.text
 
     tokenized_raw = [token.tokenText for token in v.tokens(text) if token.WORD == 1]
-    # remove tokens that are only punctuation or only whitespace
+    # remove tokens that are only punctuation or whitespace
     tokenized = {
         t for t in tokenized_raw
         if t.strip() and not all(ch in string.punctuation for ch in t)
@@ -45,7 +45,7 @@ def raamattu(update: telegram.Update) -> str:
             lemma = v.analyze(word)[0]['BASEFORM']
             lemmatized.append(lemma)
         except IndexError:
-            # word not recognized, skip it
+            # word not recognized, skip
             continue
     original_lemmae = len(lemmatized)
     biblical_lemmae = check_if_biblical(lemmatized, 'fi')
