@@ -1,4 +1,4 @@
-import sys; sys.path.insert(0, './')  # fix import issues
+#import sys; sys.path.insert(0, './')  # fix import issues
 
 import time
 from contextlib import asynccontextmanager
@@ -7,14 +7,15 @@ import envtoml
 import requests
 import sentry_sdk
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from meemirobotti.command import meme, misc
 from dotenv import load_dotenv
 from loguru import logger
-from meemirobotti.model import telegram
 from starlette.applications import Starlette
+from starlette.requests import Request
 from starlette.responses import Response
 from starlette.routing import Route
-from starlette.requests import Request
+
+from meemirobotti.command import meme, misc
+from meemirobotti.model import telegram
 
 load_dotenv()
 conf = envtoml.load(open('meemirobotti/config/config.toml', 'rb'))
