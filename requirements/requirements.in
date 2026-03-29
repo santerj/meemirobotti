@@ -1,5 +1,4 @@
 apscheduler
-envtoml
 loguru
 praw
 pydantic

@@ -3,49 +3,43 @@
 import time
 from contextlib import asynccontextmanager
 
-import envtoml
 import requests
 import sentry_sdk
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from dotenv import load_dotenv
 from loguru import logger
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import Response
 from starlette.routing import Route
 
+from meemirobotti.preflight import CONFIG
 from meemirobotti.command import meme, misc
 from meemirobotti.model import telegram
 
-load_dotenv()
-conf = envtoml.load(open('meemirobotti/config/config.toml', 'rb'))
-
 sentry_sdk.init(
-    dsn=conf['sentry']['dsn'],
+    dsn=CONFIG.ROBOTTI_SENTRY_DSN,
     traces_sample_rate=1.0,
     profiles_sample_rate=1.0,
-    environment=conf['sentry'].get('env', 'dev')
+    environment=CONFIG.ROBOTTI_SENTRY_ENV
 )
 
-def create_app():
-    c = conf['reddit']
+def create_reddit_app():
     redditor = meme.Redditor(
-        client_id=c['client_id'],
-        secret=c['secret'],
-        user_agent=c['user_agent'],
-        queue_size=c['queue_size']
+        client_id=CONFIG.ROBOTTI_REDDIT_CLIENT_ID,
+        secret=CONFIG.ROBOTTI_REDDIT_SECRET,
+        user_agent=CONFIG.ROBOTTI_REDDIT_USER_AGENT,
+        queue_size=CONFIG.ROBOTTI_REDDIT_QUEUE_SIZE
     )
-    logger.success('🟢 App started!')
+    logger.success('🟢 Redditor started!')
     return redditor
 
-# setup starlette and add reference to redditor object
-redditor = create_app()
+redditor = create_reddit_app()
 
 def refresh_meme_queue():
     redditor.refresh_queue()
 
 
-TG_TOKEN = conf['telegram']['token']
+TG_TOKEN = CONFIG.ROBOTTI_TG_TOKEN
 
 
 def parse_command(update: telegram.Update) -> str:
@@ -90,7 +84,6 @@ async def send_image() -> Response:
     pass
 
 async def bot_handler(request: Request):
-    print("blää blää blää", TG_TOKEN)
     if request.method == 'POST':
         # deserialize payload to Pydantic
         update_data = await request.json()
