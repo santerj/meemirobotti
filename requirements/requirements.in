@@ -1,6 +1,4 @@
 envtoml
-flask
-flask_apscheduler
 gunicorn
 loguru
 praw

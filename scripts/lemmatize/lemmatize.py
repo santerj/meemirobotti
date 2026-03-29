@@ -1,70 +1,63 @@
-import argparse
+import sys
+import os
+import json
 import subprocess
-import time
 
-from collections import deque
-from string import punctuation
+from libvoikko import Voikko
+from lightlemma import lemmatize
 
-from trankit import Pipeline
-from tqdm import tqdm
+v = Voikko("fi")
 
-def count_lines(input_file):
-    result = subprocess.run(['wc', '-l', input_file], capture_output=True, text=True)
-    return int(result.stdout.strip(' ').split(' ')[0])
+def lemmatize_en():
+    subprocess.run(["./prepare_bible_en.sh"], check=True)
+
+    with open("./temp/en/bible_en.txt", "r") as f:
+        text = f.read()
+        words = text.split()
+        unique_words = set(words)
+
+    lemmatized = []
+    for word in unique_words:
+        lemma = lemmatize(word)
+        lemmatized.append(lemma.lower())
+
+    lemmatized = set(lemmatized)
+    lemmatized.discard("")
+    return lemmatized
+
+def lemmatize_fi():
+    subprocess.run(["./prepare_bible_fi.sh"], check=True)
+
+    with open("./temp/fi/bible_fi.txt", "r") as f:
+        text = f.read()
+        words = text.split()
+        unique_words = set(words)
+
+    lemmatized = []
+    for word in unique_words:
+        try:
+            lemma = v.analyze(word)[0]["BASEFORM"]
+            lemmatized.append(lemma.lower())
+        except IndexError:
+            print(f"Could not lemmatize {word}")
+            lemmatized.append(word.lower())
+            continue
+
+    lemmatized = set(lemmatized)
+    lemmatized.discard("")
+    return lemmatized
 
 def main():
-    tic = time.time()
-    parser = argparse.ArgumentParser(description="Lemmatize plaintext file")
-    parser.add_argument('-l', '--language', type=str, required=True, help='Language to use (fi/en)')
-    parser.add_argument('-i', '--input', type=str, required=True, help='Input file')
-    parser.add_argument('-o', '--output', type=str, required=True, help='Output file')
+    en = lemmatize_en()
+    fi = lemmatize_fi()
 
-    args = parser.parse_args()
+    with open('results/lemmatized_en.json', 'w', encoding='utf-8') as f:
+        json.dump(list(en), f, ensure_ascii=False, indent=4)
 
-    
-    input_file = args.input
-    output_file = args.output
+    with open('results/lemmatized_fi.json', 'w', encoding='utf-8') as f:
+        json.dump(list(fi), f, ensure_ascii=False, indent=4)
 
-    if args.language == 'en':
-        language = 'english'
-    elif args.language == 'fi':
-        language = 'finnish'
-    else:
-        print('unknown language')
-        exit(1)
-
-    line_amt = count_lines(input_file)
-    lines = deque()
-
-    # load all lines into memory
-    with open(input_file, 'r') as f:
-        for line in f:
-            lines.append(line.rstrip('\n'))
-    
-    lemmas = set()
-
-    # lemmatize all lines
-    p = Pipeline(language)
-    for i in tqdm(range(line_amt)):
-        line = lines.popleft()
-        if line == '': continue  # strip empty lines
-        lemmatized = p.lemmatize(line, is_sent=True)
-        for token in lemmatized['tokens']:
-            try:
-                lemmas.add(token['lemma'].lower().replace('#', ''))  # trankit likes to leave # signs in composite words
-            except KeyError:
-                continue
-
-    with open(output_file, 'w') as f:
-        # write lemmas into output_file
-        for item in lemmas:
-            if item not in set(punctuation):  # don't write singular punctuation lemmas
-                f.write(f'{item}\n')
-            else:
-                continue
-
-    toc = time.time()
-    print(f'done in {toc-tic} s')
+    subprocess.run(["./cleanup.sh"], check=True)
 
 if __name__ == "__main__":
     main()

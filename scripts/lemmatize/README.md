@@ -7,10 +7,14 @@ Run all commands in ´scripts´ directory. All necessary requirements are specif
 
 ## Finnish
 
-    $ ./prepare_bible_fi.sh
-    $ python lemmatize.py -l fi -i temp/fi/bible_fi.txt -o temp/fi/bible_fi_lemmatized.txt
+    ./prepare_bible_fi.sh
+    python lemmatize.py -l fi -i temp/fi/bible_fi.txt -o temp/fi/bible_fi_lemmatized.txt
 
 ## English
 
-    $ ./prepare_bible_en.sh
-    $ python lemmatize.py -l en -i temp/en/bible_en.txt -o temp/en/bible_en_lemmatized.txt
+    ./prepare_bible_en.sh
+    python lemmatize.py -l en -i temp/en/bible_en.txt -o temp/en/bible_en_lemmatized.txt
+
+## Voikko
+
+`libvoikko` has to be installed to build dictionary.
