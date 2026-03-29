@@ -13,7 +13,7 @@ from starlette.responses import Response
 from starlette.routing import Route
 
 from meemirobotti.preflight import CONFIG
-from meemirobotti.command import meme, misc
+from meemirobotti.command import bible, meme, misc
 from meemirobotti.model import telegram
 
 sentry_sdk.init(
@@ -111,6 +111,14 @@ async def bot_handler(request: Request):
                 message = redditor.get_meme()
                 return await send_message(update, message)
             
+            case '/bible':
+                message = bible.bible(update)
+                return await send_message(update, message)
+            
+            case '/raamattu':
+                message = bible.raamattu(update)
+                return await send_message(update, message)
+
             case _:
                 # unregistered command
                 return await send_message(update, None)

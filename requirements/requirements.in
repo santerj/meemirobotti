@@ -1,4 +1,6 @@
 apscheduler
+libvoikko
+lightlemma
 loguru
 praw
 pydantic
