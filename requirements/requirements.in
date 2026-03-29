@@ -1,9 +1,11 @@
+apscheduler
 envtoml
-gunicorn
 loguru
 praw
 pydantic
 python-dotenv
 requests
 sentry-sdk
+starlette
+uvicorn
 uwuipy

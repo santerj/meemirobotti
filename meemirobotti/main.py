@@ -1,19 +1,23 @@
 import sys; sys.path.insert(0, './')  # fix import issues
 
 import time
+from contextlib import asynccontextmanager
 
 import envtoml
 import requests
 import sentry_sdk
-from command import meme, misc
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from meemirobotti.command import meme, misc
 from dotenv import load_dotenv
-from flask import Flask, Response, request
-from flask_apscheduler import APScheduler
 from loguru import logger
-from model import telegram
+from meemirobotti.model import telegram
+from starlette.applications import Starlette
+from starlette.responses import Response
+from starlette.routing import Route
+from starlette.requests import Request
 
 load_dotenv()
-conf = envtoml.load(open('config/config.toml'))
+conf = envtoml.load(open('meemirobotti/config/config.toml', 'rb'))
 
 sentry_sdk.init(
     dsn=conf['sentry']['dsn'],
@@ -30,25 +34,12 @@ def create_app():
         user_agent=c['user_agent'],
         queue_size=c['queue_size']
     )
-    app = Flask(__name__, static_folder='static')
-    app.config['redditor'] = redditor
     logger.success('🟢 App started!')
-    return app
+    return redditor
 
-# setup flask and add reference to redditor object
-app = create_app()
-redditor: meme.Redditor = app.config['redditor']
+# setup starlette and add reference to redditor object
+redditor = create_app()
 
-if __name__ == "__main__":
-    # run flask
-    app.run()
-
-# setup apscheduler
-scheduler = APScheduler()
-scheduler.api_enabled = False
-scheduler.init_app(app)
-scheduler.start()
-@scheduler.task('interval', id='refresh_meme_queue', minutes=5, misfire_grace_time=30)
 def refresh_meme_queue():
     redditor.refresh_queue()
 
@@ -71,7 +62,7 @@ def parse_command(update: telegram.Update) -> str:
         else: return ''
     else: return ''
 
-def send_message(update: telegram.Update, message: str) -> Response:
+async def send_message(update: telegram.Update, message: str) -> Response:
     logger.debug(message)
     if message in ('', None):
         # return early when content ends up empty
@@ -83,7 +74,9 @@ def send_message(update: telegram.Update, message: str) -> Response:
         'text': message
     }
 
-    r = requests.post(url, json=payload, timeout=3)
+    import asyncio
+    loop = asyncio.get_event_loop()
+    r = await loop.run_in_executor(None, lambda: requests.post(url, json=payload, timeout=3))
     if r.status_code == 200:
         logger.info('Sent response')
         return Response('success', 200)
@@ -91,16 +84,16 @@ def send_message(update: telegram.Update, message: str) -> Response:
         logger.error('Failed sending response')
         return Response('error', 500)
 
-def send_image() -> Response:
+async def send_image() -> Response:
     # TODO...
     pass
 
-@app.route('/bot', methods=['POST'])
-def bot():
+async def bot_handler(request: Request):
+    print("blää blää blää", TG_TOKEN)
     if request.method == 'POST':
-
         # deserialize payload to Pydantic
-        update = telegram.Update(**request.get_json())
+        update_data = await request.json()
+        update = telegram.Update(**update_data)
         logger.debug(update.model_dump)
         now = time.time()
         # TODO: discard stale requests
@@ -114,20 +107,38 @@ def bot():
         match command:
             case '/uwu':
                 message = misc.uwu(update)
-                return send_message(update, message)
+                return await send_message(update, message)
 
             case '/help':
                 message = misc.help(update)
-                return send_message(update, message)
+                return await send_message(update, message)
             
             case '/meme':
                 message = redditor.get_meme()
-                return send_message(update, message)
+                return await send_message(update, message)
             
             case _:
                 # unregistered command
-                return send_message(update, None)
+                return await send_message(update, None)
 
-@app.route('/health', methods=['GET'])
-def health():
+async def health_handler(request: Request):
     return Response('ok', 200)
+
+routes = [
+    Route('/bot', bot_handler, methods=['POST']),
+    Route('/health', health_handler, methods=['GET']),
+]
+
+# setup apscheduler
+scheduler = AsyncIOScheduler()
+scheduler.add_job(refresh_meme_queue, 'interval', minutes=5, misfire_grace_time=30)
+
+@asynccontextmanager
+async def lifespan(app):
+    # startup
+    scheduler.start()
+    yield
+    # shutdown
+    await scheduler.shutdown()
+
+app = Starlette(routes=routes, lifespan=lifespan)

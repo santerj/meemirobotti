@@ -1,7 +1,7 @@
 import random
 
 from loguru import logger
-from model import telegram
+from meemirobotti.model import telegram
 from uwuipy import Uwuipy
 
 

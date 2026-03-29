@@ -25,7 +25,7 @@ class Redditor:
     def __init__(self, client_id: str, secret: str, user_agent: str, queue_size: int = 25) -> None:
         self.targetQueueLength = queue_size
         self.subreddits = []
-        self.parse_subreddits("reddits.txt")
+        self.parse_subreddits("meemirobotti/reddits.txt")
         self.multireddit = "+".join(self.subreddits)
         self.queue = deque()
 
