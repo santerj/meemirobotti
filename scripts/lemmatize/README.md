@@ -3,14 +3,20 @@
 The unholiest part of the repository. Here lies nlp tomfoolery that
 [lemmatizes](https://en.wikipedia.org/wiki/Lemmatization) the entirety of a text file.
 
-Run all commands in ´scripts´ directory. All necessary requirements are specified in `requirements.txt`.
+The directory comes with a prebuilt index of lemmatized results in json format inside `results`.
+It is also possible to tune the lemmatization process in `lemmatize.py` and the included shell scripts.
 
-## Finnish
+## How to
 
-    $ ./prepare_bible_fi.sh
-    $ python lemmatize.py -l fi -i temp/fi/bible_fi.txt -o temp/fi/bible_fi_lemmatized.txt
+Setup venv, install dependencies
 
-## English
+    python -m venv venv
+    venv/bin/python -m pip install -r requirements.txt
 
-    $ ./prepare_bible_en.sh
-    $ python lemmatize.py -l en -i temp/en/bible_en.txt -o temp/en/bible_en_lemmatized.txt
+Run lemmatizer
+
+    venv/bin/python lemmatize.py
+
+## Voikko
+
+`libvoikko` has to be installed to build dictionary.
